@@ -9,7 +9,6 @@ import {
   Copy,
   Eye,
   EyeOff,
-  FileText,
   HelpCircle,
   Search,
 } from "lucide-react";
@@ -24,8 +23,6 @@ import {
 import type { Vault } from "@/lib/types/vault";
 import { useState } from "react";
 import Dashboard from "../Dashboard/dashboard";
-import { useLanguage } from "@/contexts/language-context";
-import { DocumentUploader } from "./document-uploader";
 import { toast } from "sonner";
 import { VaultAllocationBreakdown } from "@/components/elements/vault-allocation-breakdown";
 import {
@@ -45,12 +42,13 @@ import { VaultReAllocation } from "@/components/elements/vault-reallocation";
 import { VaultSupply } from "@/components/elements/vault-supplyposition";
 import { TransactionTypeSelector } from "@/components/elements/transaction-types";
 import { VaultActivity } from "@/components/elements/vault-activity";
+import Image from "next/image";
 interface VaultDetailPageProps {
   vault: Vault;
 }
 
 export function VaultDetailPage({ vault }: VaultDetailPageProps) {
-  const { t } = useLanguage();
+  //   const { t } = useLanguage();
   const isMobile = useMediaQuery({ maxWidth: 1024 });
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
@@ -61,7 +59,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
   };
 
   // Default visible columns
-  const [visibleColumns, setVisibleColumns] = useState<any[]>([
+  const [visibleColumns, setVisibleColumns] = useState([
     { id: "percentage", name: "Allocation %", visible: true },
     { id: "vaultSupply", name: "Vault Supply", visible: true },
     { id: "collateral", name: "Collateral", visible: true },
@@ -77,16 +75,12 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
     { id: "marketId", name: "Market ID", visible: false },
   ]);
 
-  const [visibleReAllocationColumns, setVisibleReAllocationColumns] = useState<
-    any[]
-  >([
+  const [visibleReAllocationColumns, setVisibleReAllocationColumns] = useState([
     { id: "timestamp", name: "Date & Time", visible: true },
     { id: "market", name: "Market", visible: true },
   ]);
 
-  const [visibleTransactionColumns, setVisibleTransactionColumns] = useState<
-    any[]
-  >([
+  const [visibleTransactionColumns, setVisibleTransactionColumns] = useState([
     { id: "dateTime", name: "Date & Time", visible: true },
     { id: "wallet", name: "Wallet", visible: true },
     { id: "hash", name: "Hash", visible: true },
@@ -146,10 +140,12 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
           <div className="flex flex-col md:flex-row items-center gap-8 flex-nowrap mt-9 md:mt-0">
             <div className="h-[100px] w-[100px] rounded-full overflow-hidden bg-transparent p-[6.6px] flex items-center justify-center">
               {vault.icon ? (
-                <img
+                <Image
                   src={vault.icon || "/placeholder.svg"}
                   alt={vault.name}
                   className="object-cover w-full h-full"
+                  width={87}
+                  height={87}
                 />
               ) : (
                 <div className="text-4xl">{vault.token.symbol.charAt(0)}</div>
@@ -163,7 +159,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                 <div className="flex items-center gap-2">
                   <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-transparent flex items-center justify-center">
                     {vault.token.icon ? (
-                      <img
+                      <Image
                         src={
                           vault.token.icon ||
                           `https://cdn.morpho.org/assets/logos/${vault.token.symbol}.svg`
@@ -184,7 +180,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                 <div className="flex items-center gap-2">
                   <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-transparent flex items-center justify-center">
                     {vault.curator.icon ? (
-                      <img
+                      <Image
                         src={
                           vault.curator.icon ||
                           `https://cdn.morpho.org/assets/logos/mevcapital.png`
@@ -243,10 +239,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
               </InfoMobileCard>
 
               <InfoMobileCard title="Vault Address">
-                <AddressInfo
-                  address={vault.vaultAddress}
-                  label="Vault address"
-                />
+                <AddressInfo address={vault.vaultAddress || ""} />
               </InfoMobileCard>
 
               <InfoMobileCard title="Liquidity">
@@ -254,10 +247,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
               </InfoMobileCard>
 
               <InfoMobileCard title="Guardian Address">
-                <AddressInfo
-                  address={vault.guardianAddress}
-                  label="Guardian address"
-                />
+                <AddressInfo address={vault.guardianAddress || ""} />
               </InfoMobileCard>
             </div>
           ) : (
@@ -267,7 +257,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                 <div className="flex items-center gap-2">
                   <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
                     {vault.curator.icon ? (
-                      <img
+                      <Image
                         src={vault.curator.icon || "/placeholder.svg"}
                         alt={vault.curator.name}
                         className="object-cover w-full h-full"
@@ -298,7 +288,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                 <div className="flex items-center gap-2">
                   <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
                     {vault.token.icon ? (
-                      <img
+                      <Image
                         src={vault.token.icon || "/placeholder.svg"}
                         alt={vault.token.symbol}
                         className="object-cover w-full h-full"
@@ -336,7 +326,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                   <div className="flex items-center gap-2">
                     <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
                       {vault.token.icon ? (
-                        <img
+                        <Image
                           src={vault.token.icon || "/placeholder.svg"}
                           alt={vault.token.symbol}
                           className="object-cover w-full h-full"
@@ -402,7 +392,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                   <div className="flex items-center gap-2">
                     <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
                       {vault.token.icon ? (
-                        <img
+                        <Image
                           src={vault.token.icon || "/placeholder.svg"}
                           alt={vault.token.symbol}
                           className="object-cover w-full h-full"
@@ -542,7 +532,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
               <PopoverTrigger asChild>
                 <CustomButton
                   variant="outline"
-                  onClick={(e) => setSearchQuery("")}
+                  onClick={() => setSearchQuery("")}
                   className="bg-[#303436] border-zinc-700 hover:bg-zinc-800 text-white text-[11px] rounded-[4px] h-[26px] flex items-center"
                 >
                   Edit properties
@@ -609,7 +599,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
               <PopoverTrigger asChild>
                 <CustomButton
                   variant="outline"
-                  onClick={(e) => setSearchQuery("")}
+                  onClick={() => setSearchQuery("")}
                   className="bg-[#303436] border-zinc-700 hover:bg-zinc-800 text-white text-[11px] rounded-[4px] h-[26px] flex items-center"
                 >
                   Edit properties
@@ -690,7 +680,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                 <PopoverTrigger asChild>
                   <CustomButton
                     variant="outline"
-                    onClick={(e) => setSearchQuery("")}
+                    onClick={() => setSearchQuery("")}
                     className="bg-[#303436] border-zinc-700 hover:bg-zinc-800 text-white text-[11px] rounded-[4px] h-[26px] flex items-center"
                   >
                     Edit properties
@@ -790,37 +780,49 @@ function InfoCard({ title, tooltip, children }: InfoCardProps) {
 }
 
 function InfoMobileCard({ title, tooltip, children }: InfoCardProps) {
-    return (
-      <Card className="bg-[#202426] border-[#afafaf1a] border-b-[0.5px] border-t-0 border-l-0 border-r-0 rounded-none h-[60px] pt-[6px] pb-[6px] pl-0">
-        <CardContent className="px-0 flex flex-row justify-between h-full items-center">
-          <div className="flex items-center gap-1 text-[13px] text-zinc-400">
-            <span>{title}</span>
-            {tooltip && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-5 w-5 p-0">
-                      <HelpCircle className="h-3 w-3" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">{tooltip}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-          </div>
-          <div>{children}</div>
-        </CardContent>
-      </Card>
-    );
-  }
+  return (
+    <Card className="bg-[#202426] border-[#afafaf1a] border-b-[0.5px] border-t-0 border-l-0 border-r-0 rounded-none h-[60px] pt-[6px] pb-[6px] pl-0">
+      <CardContent className="px-0 flex flex-row justify-between h-full items-center">
+        <div className="flex items-center gap-1 text-[13px] text-zinc-400">
+          <span>{title}</span>
+          {tooltip && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-5 w-5 p-0">
+                    <HelpCircle className="h-3 w-3" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs">{tooltip}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
+        <div>{children}</div>
+      </CardContent>
+    </Card>
+  );
+}
 
-const CuratorInfo = ({ curator }: any) => (
+const CuratorInfo = ({
+  curator,
+}: {
+  curator: {
+    name: string;
+    icon: string;
+    url?: string;
+  };
+}) => (
   <div className="flex items-center gap-2">
     <div className="relative h-5 w-5 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
       {curator.icon ? (
-        <img src={curator.icon} alt={curator.name} className="w-full h-full" />
+        <Image
+          src={curator.icon}
+          alt={curator.name}
+          className="w-full h-full"
+        />
       ) : (
         <div className="text-[11px]">{curator.name.charAt(0)}</div>
       )}
@@ -834,11 +836,19 @@ const CuratorInfo = ({ curator }: any) => (
   </div>
 );
 
-const TokenInfo = ({ token }: any) => (
+const TokenInfo = ({
+  token,
+}: {
+  token: {
+    symbol: string;
+    icon: string;
+    address?: string;
+  };
+}) => (
   <div className="flex items-center gap-2">
     <div className="relative h-5 w-5 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
       {token.icon ? (
-        <img src={token.icon} alt={token.symbol} className="w-full h-full" />
+        <Image src={token.icon} alt={token.symbol} className="w-full h-full" />
       ) : (
         <div className="text-[11px]">{token.symbol.charAt(0)}</div>
       )}
@@ -847,12 +857,29 @@ const TokenInfo = ({ token }: any) => (
   </div>
 );
 
-const TokenValue = ({ token, value }: any) => (
+const TokenValue = ({
+  token,
+  value,
+}: {
+  token: {
+    symbol: string;
+    icon: string;
+    address?: string;
+  };
+  value: {
+    amount: string;
+    usdValue: string;
+  };
+}) => (
   <div className="flex flex-row items-center md:items-center gap-1 md:gap-2">
     <div className="flex items-center gap-2">
       <div className="relative h-5 w-5 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
         {token.icon ? (
-          <img src={token.icon} alt={token.symbol} className="w-full h-full" />
+          <Image
+            src={token.icon}
+            alt={token.symbol}
+            className="w-full h-full"
+          />
         ) : (
           <div className="text-[11px]">{token.symbol.charAt(0)}</div>
         )}
@@ -865,7 +892,7 @@ const TokenValue = ({ token, value }: any) => (
   </div>
 );
 
-const AddressInfo = ({ address, label }: any) => (
+const AddressInfo = ({ address }: { address: string }) => (
   <div className="flex items-center gap-2">
     <span className="text-white text-[13px] font-normal">{address}</span>
   </div>

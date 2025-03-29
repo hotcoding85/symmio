@@ -5,15 +5,6 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  BarChart2,
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink,
-  FileText,
-  HelpCircle,
-  MessageSquare,
-  Moon,
-  Settings,
   Sun,
   TrendingUp,
   X,
@@ -21,19 +12,14 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
-import DARK from "../../public/logo/dark.png";
-import LIGHT from "../../public/logo/light.png";
-import Image from "next/image";
 import RightArrow from "../icons/right-arrow";
 import EcosystemSvg from "../icons/ecosystem";
 import AnalyticsSvg from "../icons/analytics";
-import Morpho from "../icons/morpho";
 import MorphoSvg from "../icons/morphoSvg";
 import MorphoDoc from "../icons/morphoDoc";
 import Feedback from "../icons/feedback";
 import TOS from "../icons/tos";
 import Blockchain from "../icons/blockchain";
-
 interface SidebarProps {
   open: boolean;
   setOpen: (open: boolean) => void;

@@ -61,7 +61,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
       {/* Mobile overlay */}
       {open && (
         <div
-          className="fixed inset-0 z-40 md:hidden"
+          className="fixed inset-0 z-40 lg:hidden"
           onClick={() => setOpen(false)}
         />
       )}
@@ -69,8 +69,8 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed text-xs font-bold inset-y-0 left-0 z-50 flex flex-col bg-[#202426] transition-all duration-300 ease-in-out md:relative md:z-0",
-          open ? "translate-x-0" : "-translate-x-full md:translate-x-0",
+          "fixed text-xs font-bold inset-y-0 left-0 z-50 flex flex-col bg-[#202426] transition-all duration-300 ease-in-out lg:relative lg:z-0",
+          open ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
           collapsed ? "w-[52px] px-[10px]" : "w-[250px]"
         )}
       >
@@ -105,7 +105,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-2 top-3 md:hidden"
+            className="absolute right-2 top-3 lg:hidden"
             onClick={() => setOpen(false)}
           >
             <X className="h-6 w-6 text-white" />

@@ -49,7 +49,7 @@ interface VaultDetailPageProps {
 
 export function VaultDetailPage({ vault }: VaultDetailPageProps) {
   //   const { t } = useLanguage();
-  const isMobile = useMediaQuery({ maxWidth: 1024 });
+  const isMobile = useMediaQuery({ maxWidth: 1280 });
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
     toast(type + " copied to clipboard.", {
@@ -134,10 +134,10 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
 
   return (
     <Dashboard>
-      <div className="md:pl-[86px] md:pr-[86px] md:mt-9">
+      <div className="xl:pl-[86px] xl:pr-[86px] lg:mt-9 2xl:-mx-40">
         {/* Vault Header */}
-        <div className="flex flex-col md:flex-row gap-16 ">
-          <div className="flex flex-col md:flex-row items-center gap-8 flex-nowrap mt-9 md:mt-0">
+        <div className="flex flex-col xl:flex-row gap-16 ">
+          <div className="flex flex-col xl:flex-row items-center gap-8 flex-nowrap mt-9 lg:mt-0">
             <div className="h-[100px] w-[100px] rounded-full overflow-hidden bg-transparent p-[6.6px] flex items-center justify-center">
               {vault.icon ? (
                 <Image
@@ -152,10 +152,10 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
               )}
             </div>
             <div className="flex gap-6 flex-col">
-              <h1 className="text-[38px] min-w-[400px] h-[44px] text-white text-center md:text-left">
+              <h1 className="text-[38px] min-w-[400px] h-[44px] text-white text-center xl:text-left">
                 {vault.name}
               </h1>
-              <div className="flex items-center gap-4 mt-2 justify-center md:justify-start">
+              <div className="flex items-center gap-4 mt-2 justify-center xl:justify-start">
                 <div className="flex items-center gap-2">
                   <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-transparent flex items-center justify-center">
                     {vault.token.icon ? (
@@ -165,6 +165,8 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                           `https://cdn.morpho.org/assets/logos/${vault.token.symbol}.svg`
                         }
                         alt={vault.token.symbol}
+                        width={17}
+                        height={17}
                         className="object-cover w-full h-full"
                       />
                     ) : (
@@ -185,6 +187,8 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                           vault.curator.icon ||
                           `https://cdn.morpho.org/assets/logos/mevcapital.png`
                         }
+                        width={17}
+                        height={17}
                         alt={vault.curator.name}
                         className="object-cover w-full h-full"
                       />
@@ -211,7 +215,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
 
         {/* Vault Info */}
         <div className="pt-20">
-          <h2 className="md:text-[20px] text-[16px] mb-4 text-white font-custom">
+          <h2 className="lg:text-[20px] text-[16px] mb-4 text-white font-custom">
             Vault Info
           </h2>
           {isMobile ? (
@@ -251,7 +255,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
               </InfoMobileCard>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-5">
               {/* Curator */}
               <InfoCard title="Curator">
                 <div className="flex items-center gap-2">
@@ -261,6 +265,8 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                         src={vault.curator.icon || "/placeholder.svg"}
                         alt={vault.curator.name}
                         className="object-cover w-full h-full"
+                        width={17}
+                        height={17}
                       />
                     ) : (
                       <div className="text-xs">
@@ -292,6 +298,8 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                         src={vault.token.icon || "/placeholder.svg"}
                         alt={vault.token.symbol}
                         className="object-cover w-full h-full"
+                        width={17}
+                        height={17}
                       />
                     ) : (
                       <div className="text-xs">
@@ -330,6 +338,8 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                           src={vault.token.icon || "/placeholder.svg"}
                           alt={vault.token.symbol}
                           className="object-cover w-full h-full"
+                          width={17}
+                          height={17}
                         />
                       ) : (
                         <div className="text-xs">
@@ -396,6 +406,8 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                           src={vault.token.icon || "/placeholder.svg"}
                           alt={vault.token.symbol}
                           className="object-cover w-full h-full"
+                          width={17}
+                          height={17}
                         />
                       ) : (
                         <div className="text-xs">
@@ -462,7 +474,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
           )}
 
           {vault.documents.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-4">
               {vault.documents.map((doc) => (
                 <Link
                   key={doc.id}
@@ -503,7 +515,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
         </div> */}
 
         <div className="pt-16">
-          <h1 className="md:text-[20px] text-white flex justify-between md:items-center flex-row flex-wrap md:flex-nowrap">
+          <h1 className="lg:text-[20px] text-white flex justify-between lg:items-center flex-row flex-wrap lg:flex-nowrap">
             <div className="flex items-center gap-3">
               <div>Vault Allocation Breakdown</div>
               <TooltipProvider>
@@ -591,7 +603,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
         </div>
 
         <div className="pt-16">
-          <h1 className="md:text-[20px] text-white flex justify-between md:items-center flex-row flex-wrap md:flex-nowrap">
+          <h1 className="lg:text-[20px] text-white flex justify-between lg:items-center flex-row flex-wrap lg:flex-nowrap">
             <div className="flex items-center gap-3">
               <div>Vault Reallocations</div>
             </div>
@@ -661,7 +673,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
         </div>
 
         <div className="pt-16">
-          <h1 className="md:text-[20px] text-white flex justify-between md:items-center flex-row flex-wrap md:flex-nowrap">
+          <h1 className="lg:text-[20px] text-white flex justify-between lg:items-center flex-row flex-wrap lg:flex-nowrap">
             <div className="flex items-center gap-3">
               <div>Supply Positions</div>
             </div>
@@ -670,7 +682,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
         </div>
 
         <div className="pt-16">
-          <h1 className="md:text-[20px] text-white flex justify-between md:items-center flex-row flex-wrap md:flex-nowrap">
+          <h1 className="lg:text-[20px] text-white flex justify-between lg:items-center flex-row flex-wrap lg:flex-nowrap">
             <div className="flex items-center gap-3">
               <div>User Activity</div>
             </div>
@@ -754,7 +766,7 @@ interface InfoCardProps {
 
 function InfoCard({ title, tooltip, children }: InfoCardProps) {
   return (
-    <Card className="bg-[#202426] border-[#afafaf1a] h-[100px] p-5 rounded-[8px]">
+    <Card className="bg-[#202426] border-[#afafaf1a] border-none h-[100px] p-5 rounded-[8px]">
       <CardContent className="px-0 flex flex-col justify-between h-full">
         <div className="flex items-center gap-1 mb-3 text-[13px] text-zinc-400">
           <span>{title}</span>
@@ -822,6 +834,8 @@ const CuratorInfo = ({
           src={curator.icon}
           alt={curator.name}
           className="w-full h-full"
+          width={20}
+          height={20}
         />
       ) : (
         <div className="text-[11px]">{curator.name.charAt(0)}</div>
@@ -848,7 +862,13 @@ const TokenInfo = ({
   <div className="flex items-center gap-2">
     <div className="relative h-5 w-5 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
       {token.icon ? (
-        <Image src={token.icon} alt={token.symbol} className="w-full h-full" />
+        <Image
+          src={token.icon}
+          alt={token.symbol}
+          className="w-full h-full"
+          width={20}
+          height={20}
+        />
       ) : (
         <div className="text-[11px]">{token.symbol.charAt(0)}</div>
       )}
@@ -871,7 +891,7 @@ const TokenValue = ({
     usdValue: string;
   };
 }) => (
-  <div className="flex flex-row items-center md:items-center gap-1 md:gap-2">
+  <div className="flex flex-row items-center lg:items-center gap-1 lg:gap-2">
     <div className="flex items-center gap-2">
       <div className="relative h-5 w-5 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
         {token.icon ? (
@@ -879,6 +899,8 @@ const TokenValue = ({
             src={token.icon}
             alt={token.symbol}
             className="w-full h-full"
+            width={20}
+            height={20}
           />
         ) : (
           <div className="text-[11px]">{token.symbol.charAt(0)}</div>

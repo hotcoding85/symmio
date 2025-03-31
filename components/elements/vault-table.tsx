@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/tooltip";
 import InstantAPY from "../icons/instantApy";
 import Image from "next/image";
-import { VaultInfo, vaults } from "@/lib/data";
+import { VaultInfo } from "@/lib/data";
 import CustomTooltip from "./custom-tooltip";
 import { useState } from "react";
 import RightArrow from "../icons/right-arrow";

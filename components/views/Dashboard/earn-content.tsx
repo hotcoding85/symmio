@@ -8,7 +8,7 @@ import Deposit from "@/components/icons/deposit";
 import Borrow from "@/components/icons/borrow";
 import { CustomButton } from "@/components/ui/custom-button";
 import { ColumnVisibilityPopover } from "@/components/elements/column-visibility-popover";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useLanguage } from "@/contexts/language-context";
 import { vaults } from "@/lib/data";
 import Link from "next/link";
@@ -31,7 +31,7 @@ export function EarnContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortColumn, setSortColumn] = useState<string>("vaultName");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-  const [showHowEarnWorks, setShowHowEarnWorks] = useState(false);
+  const [, setShowHowEarnWorks] = useState(false);
 
   // Function to handle sorting
   const handleSort = (columnId: string, direction: "asc" | "desc") => {
@@ -64,8 +64,8 @@ export function EarnContent() {
 
     // Then sort the filtered results
     return [...filtered].sort((a, b) => {
-      let valueA: any;
-      let valueB: any;
+      let valueA: number | string;
+      let valueB: number | string;
 
       // Extract the values to compare based on the sort column
       switch (sortColumn) {

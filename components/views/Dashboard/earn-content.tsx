@@ -31,7 +31,6 @@ export function EarnContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortColumn, setSortColumn] = useState<string>("vaultName");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-  const [, setShowHowEarnWorks] = useState(false);
 
   // Function to handle sorting
   const handleSort = (columnId: string, direction: "asc" | "desc") => {
@@ -130,28 +129,27 @@ export function EarnContent() {
     }));
 
 
-
   return (
     <div className="space-y-6">
       <div className="flex flex-row justify-between">
-        <h1 className="text-[38px] text-white flex items-center">
+        <h1 className="text-[38px] text-primary flex items-center">
           {t("common.earn")}
         </h1>
         <div className="hidden gap-3 md:flex">
           <Link href={"./analytics"}>
-            <Card className="bg-[#202426] gap-5 border-none cursor-pointer p-5 flex flex-col h-[98px] min-w-[194px] rounded-[12px]">
+            <Card className="bg-foreground gap-5 border-none cursor-pointer p-5 flex flex-col h-[98px] min-w-[194px] rounded-[12px]">
               <CardHeader className="flex flex-row items-center justify-between p-0 w-full">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   <div className="flex items-center gap-2 w-full">
                     <Deposit className="h-[14px] w-[14px]" />
-                    <div className="text-[#ffffffcc] text-[12px]">
+                    <div className="text-secondary text-[12px]">
                       {t("common.totalDeposits")}
                     </div>
                   </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0 h-[20px]">
-                <div className="font-normal text-white text-[15px] pb-2">
+                <div className="font-normal text-secondary text-[15px] pb-2">
                   $4,736,811,455
                 </div>
               </CardContent>
@@ -159,19 +157,19 @@ export function EarnContent() {
           </Link>
 
           <Link href={"./analytics"}>
-            <Card className="bg-[#202426] gap-5 border-none cursor-pointer p-5 flex flex-col h-[98px] min-w-[194px] rounded-[12px]">
+            <Card className="bg-foreground gap-5 border-none cursor-pointer p-5 flex flex-col h-[98px] min-w-[194px] rounded-[12px]">
               <CardHeader className="flex flex-row items-center justify-between p-0 w-full">
                 <CardTitle className="text-sm font-medium text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Borrow className="h-[14px] w-[14px]" />
-                    <div className="text-[#ffffffcc] text-[12px]">
+                    <div className="text-secondary text-[12px]">
                       {t("common.totalBorrow")}
                     </div>
                   </div>
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-0 h-[20px]">
-                <div className="text-[15px] font-normal text-white mb-2">
+                <div className="text-[15px] font-normal text-secondary mb-2">
                   $1,706,255,566
                 </div>
               </CardContent>
@@ -183,13 +181,12 @@ export function EarnContent() {
       <div className="space-y-4 mt-20">
         <div className="flex gap-4 md:items-center md:justify-between flex-col md:flex-row">
           <div className="flex items-center gap-4">
-            <h2 className="text-[16px] font-normal text-[#fffffff2]">
+            <h2 className="text-[16px] font-normal text-card">
               {t("common.depositInVault")}
             </h2>
             <CustomButton
               variant="secondary"
               className="h-auto text-[11px] rounded-[2px]"
-              onClick={() => setShowHowEarnWorks(true)}
             >
               {t("common.howDoesItWork")}
             </CustomButton>
@@ -205,7 +202,7 @@ export function EarnContent() {
               <Input
                 type="search"
                 placeholder={t("common.searchVaults")}
-                className="pl-8 text-xs h-[32px] md:w-[150px] text-white border-[#afafaf1a] focus:border-[#afafaf1a] focus:border-none"
+                className="pl-8 text-xs h-[32px] md:w-[150px] text-primary border-[#afafaf1a] focus:border-[#afafaf1a] focus:border-none"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />

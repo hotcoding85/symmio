@@ -4,26 +4,21 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect, useRef, useState } from "react";
-// import { useLanguage } from "@/contexts/language-context";
 import { useMediaQuery } from "react-responsive";
 import { useTheme } from "next-themes";
+import { useLanguage } from "@/contexts/language-context";
 interface HowEarnWorksProps {
   onClose: () => void;
 }
 
 export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
-  //   const { t } = useLanguage();
+  const { t } = useLanguage();
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [activeStep, setActiveStep] = useState(1);
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const { theme } = useTheme();
   const scrollableRef = useRef<HTMLDivElement | null>(null);
 
-  const scrollPositions: Record<number, number> = {
-    1: 0,
-    2: 330,
-    3: 540,
-  };
   const handleStepChange = (step: number) => {
     setActiveStep(step);
 
@@ -54,24 +49,12 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
             </Button>
           </div>
 
-          <p className="text-secondary text-sm mb-4">
-            Morpho is committed to industry-leading security practices, but
-            there are still risks associated with{" "}
-            <a
-              href="https://docs.morpho.org/morpho/concepts/risk-documentation"
-              className="underline"
-            >
-              Morpho
-            </a>{" "}
-            and{" "}
-            <a
-              href="https://docs.morpho.org/morpho-vaults/concepts/risk-documentation"
-              className="underline"
-            >
-              Morpho Vault
-            </a>
-            .
-          </p>
+          <p
+            className="text-secondary text-sm mb-4"
+            dangerouslySetInnerHTML={{
+              __html: t("common.morphoSecurityWithLinks"),
+            }}
+          ></p>
 
           <div className="flex gap-2 mb-4 items-center">
             <Checkbox
@@ -80,40 +63,33 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
               onCheckedChange={(checked) => setTermsAccepted(checked === true)}
               className="mt-1 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 cursor-pointer"
             />
-            <label htmlFor="terms-mobile" className="text-sm text-secondary">
-              Check this box to confirm have read the Morpho{" "}
-              <a
-                href="https://cdn.morpho.org/documents/Morpho_Terms_of_Use.pdf"
-                className="underline"
-              >
-                Terms of Use
-              </a>{" "}
-              and understand the associated risks.
-            </label>
+            <label
+              htmlFor="terms-mobile"
+              className="text-sm text-secondary"
+              dangerouslySetInnerHTML={{
+                __html: t("common.checkBoxConfirmationWithLink"),
+              }}
+            ></label>
           </div>
 
           <Button
-            className="w-full bg-blue-600 hover:bg-blue-700"
+            className="w-full bg-blue-600 hover:bg-blue-700 cursor-pointer"
             disabled={!termsAccepted}
             onClick={onClose}
           >
-            Proceed
+            {t("common.proceed")}
           </Button>
         </div>
 
         {/* Title */}
         <h2 className="text-[20px] text-card font-normal text-center mb-8">
-          How it works
+          {t("common.howEarnWorks")}
         </h2>
 
         {/* Visualization */}
         <div className="flex flex-col items-center justify-center mb-12">
           <div className="w-[250px] h-[340px] overflow-hidden">
-            <svg
-              viewBox="0 0 537 1465"
-              fill="none"
-              className="anim-svg"
-            >
+            <svg viewBox="0 0 537 1465" fill="none" className="anim-svg">
               <g id="step-1">
                 <path
                   d="M53.6741 59.9883H55.1461V70.2203H61.5461V71.5083H53.6741V59.9883ZM62.5421 67.4283C62.5421 64.6603 64.0781 63.1643 66.4941 63.1643C68.9181 63.1643 70.2541 64.6763 70.2541 67.0763V67.7803H63.9021C63.9341 69.4763 64.9101 70.5643 66.4941 70.5643C67.9981 70.5643 68.6941 69.7083 68.8221 68.9563H70.0861V69.1963C69.9021 70.1963 68.9581 71.7003 66.5101 71.7003C64.0941 71.7003 62.5421 70.2043 62.5421 67.4283ZM63.9261 66.6683H68.9101C68.8941 65.2763 68.0701 64.2923 66.4861 64.2923C64.9341 64.2923 64.0381 65.2923 63.9261 66.6683ZM72.0926 63.3563H73.4606V64.4043H73.5886C74.1726 63.5163 75.1566 63.1723 76.3166 63.1723C78.2126 63.1723 79.3966 64.1323 79.3966 66.1243V71.5083H77.9886V66.2603C77.9886 64.9323 77.2686 64.3483 75.9966 64.3483C74.6046 64.3483 73.5006 65.1723 73.5006 66.9563V71.5083H72.0926V63.3563ZM89.1435 59.9883V71.5083H87.7755V70.3883H87.6475C87.0315 71.3243 86.0475 71.6923 84.8875 71.6923C82.7675 71.6923 81.1515 70.2523 81.1515 67.4363C81.1515 64.6123 82.7675 63.1723 84.8875 63.1723C86.0235 63.1723 86.9995 63.5323 87.6075 64.4363H87.7355V59.9883H89.1435ZM82.5675 67.4363C82.5675 69.4123 83.6235 70.5243 85.1755 70.5243C86.7355 70.5243 87.7915 69.4123 87.7915 67.4363C87.7915 65.4523 86.7355 64.3403 85.1755 64.3403C83.6235 64.3403 82.5675 65.4523 82.5675 67.4363ZM90.9796 67.4283C90.9796 64.6603 92.5156 63.1643 94.9316 63.1643C97.3556 63.1643 98.6916 64.6763 98.6916 67.0763V67.7803H92.3396C92.3716 69.4763 93.3476 70.5643 94.9316 70.5643C96.4356 70.5643 97.1316 69.7083 97.2596 68.9563H98.5236V69.1963C98.3396 70.1963 97.3956 71.7003 94.9476 71.7003C92.5316 71.7003 90.9796 70.2043 90.9796 67.4283ZM92.3636 66.6683H97.3476C97.3316 65.2763 96.5076 64.2923 94.9236 64.2923C93.3716 64.2923 92.4756 65.2923 92.3636 66.6683ZM100.53 63.3563H101.89V64.3323H102.018C102.298 63.7563 102.81 63.3243 104.034 63.3243H105.17V64.5403H104.066C102.538 64.5403 101.938 65.3803 101.938 67.0363V71.5083H100.53V63.3563Z"
@@ -124,8 +100,8 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M276.972 66.5099L117.972 66.5066"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="0.75"
-                  stroke-linecap="round"
+                  strokeWidth="0.75"
+                  strokeLinecap="round"
                   opacity={activeStep === 1 ? "1" : "0.1"}
                   // style="transition: var(--transitions-appear);"
                 ></path>
@@ -140,8 +116,8 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M204.972 451.887L155.972 451.883"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="0.75"
-                  stroke-linecap="round"
+                  strokeWidth="0.75"
+                  strokeLinecap="round"
                   opacity={activeStep !== 3 ? "0.5" : "0.1"}
                   // style="transition: var(--transitions-appear);"
                 ></path>
@@ -156,8 +132,8 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M276.972 1385.43L133.972 1385.42"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="0.75"
-                  stroke-linecap="round"
+                  strokeWidth="0.75"
+                  strokeLinecap="round"
                   opacity={activeStep === 3 ? "1" : "0.1"}
                   // style="transition: var(--transitions-appear);"
                 ></path>
@@ -166,9 +142,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="first-path"
                 d="M268.468 109.474v295"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 1 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -179,9 +155,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                 ></path>
                 <animateMotion
@@ -200,9 +176,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                   opacity="0"
                 >
@@ -228,9 +204,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="second-path-long-vertical"
                 d="M268.46 558.8L268.46 750.79"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 2 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -238,9 +214,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="second-path-left-part"
                 d="M268.448 680.458L97.1001 680.458C86.0544 680.458 77.1001 689.413 77.1001 700.458L77.1001 825.73"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 2 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -248,9 +224,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="second-path-right-part"
                 d="M268.448 680.458L439.535 680.458C450.563 680.458 459.51 689.386 459.535 700.414L459.809 824.174"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 2 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               >
@@ -258,9 +234,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                   <path
                     d="M6.2683 0l-6.2683 6l-6.2683 -6"
                     stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     transform="rotate(-90)"
                   ></path>
                   <animateMotion
@@ -277,9 +253,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                 ></path>
                 <animateMotion
@@ -298,9 +274,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                   opacity="0"
                 >
@@ -329,9 +305,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                   opacity="0"
                 >
@@ -357,9 +333,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="third-path-vertical-part"
                 d="M268.468 1387.43L268.468 930"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 3 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -367,9 +343,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="third-path-left-part"
                 d="M268.512 1009.24L97.1016 1009.24C86.0559 1009.24 77.1016 1000.28 77.1016 989.237L77.1016 930.228"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 3 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -377,9 +353,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="third-path-right-part"
                 d="M268.472 1009.24L439.826 1009.24C450.872 1009.24 459.826 1000.28 459.826 989.237L459.826 923.857"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 3 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -390,9 +366,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                 ></path>
                 <animateMotion
@@ -411,9 +387,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                 >
                   <animate
@@ -441,9 +417,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                 >
                   <animate
@@ -471,13 +447,7 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 opacity={activeStep === 1 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></image>
-              <rect
-                width="10"
-                height="95"
-                x="263"
-                y="190"
-                fill="none"
-              ></rect>
+              <rect width="10" height="95" x="263" y="190" fill="none"></rect>
               <image
                 href="https://cdn.morpho.org/v2/assets/images/graph_weth.png"
                 height="97"
@@ -681,14 +651,10 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
           {activeStep === 1 && (
             <div>
               <h3 className="text-[16px] text-card font-normal mb-2">
-                Deposit in a Morpho Vault
+                {t("common.depositInMorphoVault")}
               </h3>
               <p className="text-secondary text-[13px] leading-[16px]">
-                Earn yield by depositing an asset into a vault curated by
-                third-party risk experts. Each vault has a unique risk profile
-                and strategy determined by the curator. Creating Morpho Vaults
-                is permissionless, so users should assess a vault&apos;s curator
-                and risk exposure before depositing.
+                {t("common.earnYieldByDepositingAssetIntoVault")}
               </p>
             </div>
           )}
@@ -696,13 +662,10 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
           {activeStep === 2 && (
             <div>
               <h3 className="text-[16px] text-card font-normal mb-2">
-                Assets are supplied on Morpho
+                {t("common.assetsAreSuppliedOnMorpho")}
               </h3>
               <p className="text-secondary text-[13px] leading-[16px]">
-                A Morpho Vault can only allocate deposits on Morpho Markets
-                primarylisted by the curator. Depositors are exposed to risks
-                related to the parameters of each market, including the
-                collateral asset, liquidation LTV, and oracles.
+                {t("common.morphoVaultAllocation")}
               </p>
             </div>
           )}
@@ -710,12 +673,10 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
           {activeStep === 3 && (
             <div>
               <h3 className="text-[16px] text-card font-normal mb-2">
-                Earn yield from borrowers
+                {t("common.earnYieldFromBorrowers")}
               </h3>
               <p className="text-secondary text-[13px] leading-[16px]">
-                Vaults generate a yield from over-collateralized lending.
-                Borrowers deposit collateral and borrow liquidity from the
-                underlying markets, paying interest to the vault.
+                {t("common.vaultsGenerateYield")}
               </p>
             </div>
           )}
@@ -760,8 +721,8 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M276.972 66.5099L117.972 66.5066"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="0.75"
-                  stroke-linecap="round"
+                  strokeWidth="0.75"
+                  strokeLinecap="round"
                   opacity={activeStep === 1 ? "1" : "0.1"}
                   // style="transition: var(--transitions-appear);"
                 ></path>
@@ -776,8 +737,8 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M204.972 451.887L155.972 451.883"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="0.75"
-                  stroke-linecap="round"
+                  strokeWidth="0.75"
+                  strokeLinecap="round"
                   opacity={activeStep !== 3 ? "0.5" : "0.1"}
                   // style="transition: var(--transitions-appear);"
                 ></path>
@@ -792,8 +753,8 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M276.972 1385.43L133.972 1385.42"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="0.75"
-                  stroke-linecap="round"
+                  strokeWidth="0.75"
+                  strokeLinecap="round"
                   opacity={activeStep === 3 ? "1" : "0.1"}
                   // style="transition: var(--transitions-appear);"
                 ></path>
@@ -802,9 +763,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="first-path"
                 d="M268.468 109.474v295"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 1 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -815,9 +776,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                 ></path>
                 <animateMotion
@@ -836,9 +797,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                   opacity="0"
                 >
@@ -864,9 +825,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="second-path-long-vertical"
                 d="M268.46 558.8L268.46 750.79"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 2 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -874,9 +835,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="second-path-left-part"
                 d="M268.448 680.458L97.1001 680.458C86.0544 680.458 77.1001 689.413 77.1001 700.458L77.1001 825.73"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 2 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -884,9 +845,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="second-path-right-part"
                 d="M268.448 680.458L439.535 680.458C450.563 680.458 459.51 689.386 459.535 700.414L459.809 824.174"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 2 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               >
@@ -894,9 +855,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                   <path
                     d="M6.2683 0l-6.2683 6l-6.2683 -6"
                     stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                     transform="rotate(-90)"
                   ></path>
                   <animateMotion
@@ -913,9 +874,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                 ></path>
                 <animateMotion
@@ -934,9 +895,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                   opacity="0"
                 >
@@ -965,9 +926,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                   opacity="0"
                 >
@@ -993,9 +954,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="third-path-vertical-part"
                 d="M268.468 1387.43L268.468 930"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 3 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -1003,9 +964,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="third-path-left-part"
                 d="M268.512 1009.24L97.1016 1009.24C86.0559 1009.24 77.1016 1000.28 77.1016 989.237L77.1016 930.228"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 3 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -1013,9 +974,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 id="third-path-right-part"
                 d="M268.472 1009.24L439.826 1009.24C450.872 1009.24 459.826 1000.28 459.826 989.237L459.826 923.857"
                 stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-dasharray="0.1 4"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="0.1 4"
                 opacity={activeStep === 3 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></path>
@@ -1026,9 +987,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                 ></path>
                 <animateMotion
@@ -1047,9 +1008,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                 >
                   <animate
@@ -1077,9 +1038,9 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 <path
                   d="M6.2683 0l-6.2683 6l-6.2683 -6"
                   stroke={theme == "dark" ? "#ffffffc2" : "#191d20f2"}
-                  stroke-width="1.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                   transform="rotate(-90)"
                 >
                   <animate
@@ -1107,13 +1068,7 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 opacity={activeStep === 1 ? "1" : "0.1"}
                 //   style="transition: var(--transitions-appear);"
               ></image>
-              <rect
-                width="10"
-                height="95"
-                x="263"
-                y="190"
-                fill="none"
-              ></rect>
+              <rect width="10" height="95" x="263" y="190" fill="none"></rect>
               <image
                 href="https://cdn.morpho.org/v2/assets/images/graph_weth.png"
                 height="97"
@@ -1281,7 +1236,7 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
         {/* Right side - Steps */}
         <div className="w-full md:w-1/2 space-y-6 pt-[50px]">
           <h1 className="text-[20px] font-normal text-primary pl-10">
-            How Earn Works
+            {t("common.howEarnWorks")}
           </h1>
 
           {/* Step 1 */}
@@ -1298,7 +1253,7 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 01
               </div>
               <h3 className="text-[16px] font-normal text-card">
-                Deposit in a Morpho Vault
+                {t("common.depositInMorphoVault")}
               </h3>
             </div>
             <p
@@ -1306,11 +1261,7 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 activeStep === 1 ? "opacity-100" : "opacity-100"
               }`}
             >
-              Earn yield by depositing an asset into a vault curated by
-              third-party risk experts. Each vault has a unique risk profile and
-              strategy determined by the curator. Creating Morpho Vaults is
-              permissionless, so users should assess a vault&apos;s curator and
-              risk exposure before depositing.
+              {t("common.earnYieldByDepositingAssetIntoVault")}
             </p>
           </div>
 
@@ -1328,7 +1279,7 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 02
               </div>
               <h3 className="text-[16px] font-normal text-card leading-[16px]">
-                Assets are supplied on Morpho
+                {t("common.assetsAreSuppliedOnMorpho")}
               </h3>
             </div>
             <p
@@ -1336,10 +1287,7 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 activeStep === 2 ? "opacity-100" : "opacity-100"
               }`}
             >
-              A Morpho Vault can only allocate deposits on Morpho Markets
-              primarylisted by the curator. Depositors are exposed to risks
-              related to the parameters of each market, including the collateral
-              asset, liquidation LTV, and oracles.
+              {t("common.morphoVaultAllocation")}
             </p>
           </div>
 
@@ -1357,7 +1305,7 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 03
               </div>
               <h3 className="text-[16px] font-normal text-card leading-[16px]">
-                Earn yield from borrowers
+                {t("common.earnYieldFromBorrowers")}
               </h3>
             </div>
             <p
@@ -1365,32 +1313,18 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 activeStep === 3 ? "opacity-100" : "opacity-100"
               }`}
             >
-              Vaults generate a yield from over-collateralized lending.
-              Borrowers deposit collateral and borrow liquidity from the
-              underlying markets, paying interest to the vault.
+              {t("common.vaultsGenerateYield")}
             </p>
           </div>
 
           {/* Disclaimer */}
           <div className="pt-4 border-t border-accent">
-            <p className="text-secondary text-[13px]">
-              Morpho is committed to industry-leading security practices, but
-              there are still risks associated with{" "}
-              <a
-                href="https://docs.morpho.org/morpho/concepts/risk-documentation"
-                className="underline"
-              >
-                Morpho
-              </a>{" "}
-              and{" "}
-              <a
-                href="https://docs.morpho.org/morpho-vaults/concepts/risk-documentation"
-                className="underline"
-              >
-                Morpho Vault
-              </a>
-              .
-            </p>
+            <p
+              className="text-secondary text-[13px]"
+              dangerouslySetInnerHTML={{
+                __html: t("common.morphoSecurityWithLinks"),
+              }}
+            ></p>
 
             <div className="flex items-center gap-2 mt-4">
               <Checkbox
@@ -1401,22 +1335,19 @@ export function HowEarnWorks({ onClose }: HowEarnWorksProps) {
                 }
                 className="mt-1 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 cursor-pointer"
               />
-              <label htmlFor="terms" className="text-[12px] text-secondary">
-                Check this box to confirm have read the Morpho{" "}
-                <a
-                  href="https://cdn.morpho.org/documents/Morpho_Terms_of_Use.pdf"
-                  className="underline"
-                >
-                  Terms of Use
-                </a>{" "}
-                and understand the associated risks.
-              </label>
+              <label
+                htmlFor="terms"
+                className="text-[12px] text-secondary"
+                dangerouslySetInnerHTML={{
+                  __html: t("common.checkBoxConfirmationWithLink"),
+                }}
+              ></label>
               <Button
-                className="bg-blue-600 hover:bg-blue-700 text-[11px] h-[26px] rounded-[4px]"
+                className="bg-blue-600 hover:bg-blue-700 text-[11px] h-[26px] rounded-[4px] cursor-pointer"
                 disabled={!termsAccepted}
                 onClick={onClose}
               >
-                Proceed
+                {t("common.proceed")}
               </Button>
             </div>
           </div>

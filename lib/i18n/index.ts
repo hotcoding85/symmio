@@ -73,6 +73,21 @@ export const translations: Translations = {
       supplyPositions: "Supply Positions",
       page: "Page",
       of: "of",
+      proceed: "Proceed",
+      howEarnWorks: "How Earn Works",
+      depositInMorphoVault: "Deposit in a Morpho Vault",
+      assetsAreSuppliedOnMorpho: "Assets are supplied on Morpho",
+      earnYieldFromBorrowers: "Earn yield from borrowers",
+      earnYieldByDepositingAssetIntoVault:
+        "Earn yield by depositing an asset into a vault curated by third-party risk experts. Each vault has a unique risk profile and strategy determined by the curator. Creating Morpho Vaults is permissionless, so users should assess a vault&apos;s curator and risk exposure before depositing.",
+      morphoVaultAllocation:
+        "A Morpho Vault can only allocate deposits on Morpho Markets primary listed by the curator. Depositors are exposed to risks related to the parameters of each market, including the collateral asset, liquidation LTV, and oracles.",
+      vaultsGenerateYield:
+        "Vaults generate a yield from over-collateralized lending. Borrowers deposit collateral and borrow liquidity from the underlying markets, paying interest to the vault.",
+      morphoSecurityWithLinks:
+        'Morpho is committed to industry-leading security practices, but there are still risks associated with <a href="https://docs.morpho.org/morpho/concepts/risk-documentation" class="underline">Morpho</a> and <a href="https://docs.morpho.org/morpho-vaults/concepts/risk-documentation" class="underline">Morpho Vault</a>.',
+      checkBoxConfirmationWithLink:
+        'Check this box to confirm you have read the Morpho <a href="https://cdn.morpho.org/documents/Morpho_Terms_of_Use.pdf" class="underline">Terms of Use</a> and understand the associated risks.',
     },
     table: {
       vaultName: "Vault Name",
@@ -203,6 +218,21 @@ export const translations: Translations = {
       vaultReallocations: "Reasignaciones de Bóveda",
       page: "Página",
       of: "de",
+      proceed: "Proceder",
+      howEarnWorks: "Cómo funciona Earn",
+      depositInMorphoVault: "Depositar en un Morpho Vault",
+      assetsAreSuppliedOnMorpho: "Los activos se suministran en Morpho",
+      earnYieldFromBorrowers: "Ganar rendimiento de los prestatarios",
+      earnYieldByDepositingAssetIntoVault:
+        "Ganar rendimiento depositando un activo en un vault curado por expertos en riesgos de terceros. Cada vault tiene un perfil de riesgo único y una estrategia determinada por el curador. Crear Morpho Vaults es sin permisos, por lo que los usuarios deben evaluar al curador del vault y la exposición al riesgo antes de depositar.",
+      morphoVaultAllocation:
+        "Un Morpho Vault solo puede asignar depósitos en los Morpho Markets primarios listados por el curador. Los depositantes están expuestos a riesgos relacionados con los parámetros de cada mercado, incluyendo el activo colateral, el LTV de liquidación y los oráculos.",
+      vaultsGenerateYield:
+        "Los vaults generan rendimiento a partir de préstamos sobre-colateralizados. Los prestatarios depositan colateral y toman liquidez de los mercados subyacentes, pagando intereses al vault.",
+      morphoSecurityWithLinks:
+        'Morpho está comprometido con las mejores prácticas de seguridad de la industria, pero aún existen riesgos asociados con <a href="https://docs.morpho.org/morpho/concepts/risk-documentation" class="underline">Morpho</a> y <a href="https://docs.morpho.org/morpho-vaults/concepts/risk-documentation" class="underline">Morpho Vault</a>.',
+      checkBoxConfirmationWithLink:
+        'Marque esta casilla para confirmar que ha leído los <a href="https://cdn.morpho.org/documents/Morpho_Terms_of_Use.pdf" class="underline">Términos de Uso</a> de Morpho y comprende los riesgos asociados.',
     },
     table: {
       vaultName: "Nombre de Bóveda",
@@ -339,6 +369,21 @@ export const translations: Translations = {
       userActivity: "Activité de l'Utilisateur",
       page: "Page",
       of: "de",
+      proceed: "Procéder",
+      howEarnWorks: "Comment Earn fonctionne",
+      depositInMorphoVault: "Déposer dans un Morpho Vault",
+      assetsAreSuppliedOnMorpho: "Les actifs sont fournis sur Morpho",
+      earnYieldFromBorrowers: "Gagner des rendements des emprunteurs",
+      earnYieldByDepositingAssetIntoVault:
+        "Gagner des rendements en déposant un actif dans un coffre-fort curé par des experts en risques tiers. Chaque coffre-fort a un profil de risque unique et une stratégie déterminée par le curateur. La création de Morpho Vaults est sans autorisation, de sorte que les utilisateurs doivent évaluer le curateur du coffre-fort et l'exposition au risque avant de déposer.",
+      morphoVaultAllocation:
+        "Un Morpho Vault ne peut allouer des dépôts que sur les Morpho Markets primaires listés par le curateur. Les déposants sont exposés à des risques liés aux paramètres de chaque marché, y compris l'actif collatéral, le LTV de liquidation et les oracles.",
+      vaultsGenerateYield:
+        "Les coffres génèrent des rendements à partir de prêts sur-collatéralisés. Les emprunteurs déposent des collatéraux et empruntent de la liquidité sur les marchés sous-jacents, payant des intérêts au coffre.",
+      morphoSecurityWithLinks:
+        'Morpho s\'engage à respecter les meilleures pratiques de sécurité de l\'industrie, mais il existe encore des risques associés à <a href="https://docs.morpho.org/morpho/concepts/risk-documentation" class="underline">Morpho</a> et <a href="https://docs.morpho.org/morpho-vaults/concepts/risk-documentation" class="underline">Morpho Vault</a>.',
+      checkBoxConfirmationWithLink:
+        'Cochez cette case pour confirmer que vous avez lu les <a href="https://cdn.morpho.org/documents/Morpho_Terms_of_Use.pdf" class="underline">Conditions d\'utilisation</a> de Morpho et que vous comprenez les risques associés.',
     },
     table: {
       vaultName: "Nom du Coffre",
@@ -471,6 +516,22 @@ export const translations: Translations = {
       userActivity: "Nutzeraktivität",
       page: "Seite",
       of: "von",
+      proceed: "Fortfahren",
+      howEarnWorks: "Wie Earn funktioniert",
+      depositInMorphoVault: "Einzahlen in ein Morpho Vault",
+      assetsAreSuppliedOnMorpho:
+        "Vermögenswerte werden auf Morpho bereitgestellt",
+      earnYieldFromBorrowers: "Erhalten Sie Erträge von den Kreditnehmern",
+      earnYieldByDepositingAssetIntoVault:
+        "Erzielen Sie Erträge, indem Sie ein Vermögen in ein Vault einzahlen, das von Drittanbieter-Risikoexperten kuratiert wird. Jedes Vault hat ein einzigartiges Risikoprofil und eine Strategie, die vom Kurator bestimmt wird. Das Erstellen von Morpho Vaults ist ohne Berechtigungen, daher sollten Benutzer den Kurator eines Vaults und die Risikobelastung vor der Einzahlung bewerten.",
+      morphoVaultAllocation:
+        "Ein Morpho Vault kann Einlagen nur auf den von den Kuratoren primär aufgelisteten Morpho Markets zuweisen. Einzahler sind Risiken ausgesetzt, die mit den Parametern jedes Marktes verbunden sind, einschließlich des Sicherheitenassets, der Liquidations-LTV und der Orakel.",
+      vaultsGenerateYield:
+        "Vaults generieren Erträge aus überbesicherten Krediten. Kreditnehmer hinterlegen Sicherheiten und leihen Liquidität von den zugrunde liegenden Märkten, wobei sie Zinsen an das Vault zahlen.",
+      morphoSecurityWithLinks:
+        'Morpho verpflichtet sich zu branchenführenden Sicherheitspraktiken, aber es bestehen weiterhin Risiken im Zusammenhang mit <a href="https://docs.morpho.org/morpho/concepts/risk-documentation" class="underline">Morpho</a> und <a href="https://docs.morpho.org/morpho-vaults/concepts/risk-documentation" class="underline">Morpho Vault</a>.',
+      checkBoxConfirmationWithLink:
+        'Markieren Sie dieses Feld, um zu bestätigen, dass Sie die <a href="https://cdn.morpho.org/documents/Morpho_Terms_of_Use.pdf" class="underline">Nutzungsbedingungen</a> von Morpho gelesen haben und die damit verbundenen Risiken verstehen.',
     },
     table: {
       vaultName: "Tresorname",
@@ -604,6 +665,21 @@ export const translations: Translations = {
       userActivity: "Деятельность пользователя",
       page: "Страница",
       of: "из",
+      proceed: "Продолжить",
+      howEarnWorks: "Как работает Earn",
+      depositInMorphoVault: "Внести в Morpho Vault",
+      assetsAreSuppliedOnMorpho: "Активы предоставляются на Morpho",
+      earnYieldFromBorrowers: "Зарабатывайте доход от заемщиков",
+      earnYieldByDepositingAssetIntoVault:
+        "Зарабатывайте доход, вкладывая актив в хранилище, курируемое экспертами по рискам третьих сторон. Каждое хранилище имеет уникальный профиль рисков и стратегию, определенную куратором. Создание Morpho Vaults не требует разрешений, поэтому пользователи должны оценить куратора хранилища и его риски перед внесением депозита.",
+      morphoVaultAllocation:
+        "Morpho Vault может выделять депозиты только на Morpho Markets, первично указанных куратором. Депозиторы подвержены рискам, связанным с параметрами каждого рынка, включая активы залога, LTV ликвидации и оракулы.",
+      vaultsGenerateYield:
+        "Vaults генерируют доход от избыточно обеспеченного кредитования. Заемщики вносят залог и занимают ликвидность на подлежащих рынках, выплачивая проценты в хранилище.",
+      morphoSecurityWithLinks:
+        'Morpho стремится к соблюдению передовых практик безопасности в отрасли, но все равно существуют риски, связанные с <a href="https://docs.morpho.org/morpho/concepts/risk-documentation" class="underline">Morpho</a> и <a href="https://docs.morpho.org/morpho-vaults/concepts/risk-documentation" class="underline">Morpho Vault</a>.',
+      checkBoxConfirmationWithLink:
+        'Отметьте это поле, чтобы подтвердить, что вы прочитали <a href="https://cdn.morpho.org/documents/Morpho_Terms_of_Use.pdf" class="underline">Условия использования</a> Morpho и понимаете связанные с этим риски.',
     },
     table: {
       vaultName: "Название хранилища",
@@ -685,8 +761,8 @@ export const translations: Translations = {
       superform: "Приложение для богатства на блокчейне",
       vaultcraft:
         "Ведущий модульный DeFi и RTCI протокол хранилищ — теперь с поддержкой Gnosis Safe.",
-      opencover:
-        "Ведущий агрегатор страхования для защиты вашего портфеля от рисков протокола.",
+      checkBoxConfirmationWithLink:
+        'Отметьте это поле, чтобы подтвердить, что вы прочитали <a href="https://cdn.morpho.org/documents/Morpho_Terms_of_Use.pdf" class="underline">Условия использования</a> Morpho и понимаете связанные с этим риски.',
     },
   },
 };

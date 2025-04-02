@@ -12,6 +12,7 @@ import { useMemo, useState } from "react";
 import { useLanguage } from "@/contexts/language-context";
 import { vaults } from "@/lib/data";
 import Link from "next/link";
+import { HowEarnWorks } from "./how-earn-works";
 
 const initialColumns = [
   { id: "vaultName", title: "Vault Name", visible: true },
@@ -31,6 +32,7 @@ export function EarnContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortColumn, setSortColumn] = useState<string>("vaultName");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [showHowEarnWorks, setShowHowEarnWorks] = useState(false);
 
   // Function to handle sorting
   const handleSort = (columnId: string, direction: "asc" | "desc") => {
@@ -128,6 +130,13 @@ export function EarnContent() {
       // translatedTitle: t(column.title),
     }));
 
+  if (showHowEarnWorks) {
+    return (
+      <div className="bg-foreground border-none border-zinc-800 rounded-lg p-0 -mt-[60px] md:mt-0">
+        <HowEarnWorks onClose={() => setShowHowEarnWorks(false)} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -187,6 +196,7 @@ export function EarnContent() {
             <CustomButton
               variant="secondary"
               className="h-auto text-[11px] rounded-[2px]"
+              onClick={() => setShowHowEarnWorks(true)}
             >
               {t("common.howDoesItWork")}
             </CustomButton>

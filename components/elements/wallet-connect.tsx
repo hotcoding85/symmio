@@ -4,6 +4,7 @@ import onboard from "@/lib/blocknative/web3-onboard";
 import { useState } from "react";
 
 export default function WalletConnect() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [wallet, setWallet] = useState<any>(null);
 
   const connectWallet = async () => {

@@ -37,6 +37,7 @@ export function Header({ sidebarOpen, setSidebarOpen }: HeaderProps) {
   });
 
   // Wallet state
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [wallet, setWallet] = useState<any>(null);
 
   const connectWallet = async () => {

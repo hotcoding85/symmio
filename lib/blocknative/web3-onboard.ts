@@ -1,5 +1,4 @@
 import Onboard from "@web3-onboard/core";
-import injectedModule from "@web3-onboard/injected-wallets";
 import coinbaseWallet from "@web3-onboard/coinbase";
 import walletConnectModule from "@web3-onboard/walletconnect";
 import trustWallet from "@web3-onboard/trust";

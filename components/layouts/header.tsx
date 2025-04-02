@@ -9,14 +9,16 @@ import { CustomButton } from "../ui/custom-button";
 import Navigation from "../icons/navigation";
 import { LanguageSelector } from "../elements/language-selector";
 import { useLanguage } from "@/contexts/language-context";
-
+import { useState } from "react";
+import onboard from "@/lib/blocknative/web3-onboard";
+import { shortenAddress } from "@/lib/utils";
 interface HeaderProps {
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
 }
 
 export function Header({ sidebarOpen, setSidebarOpen }: HeaderProps) {
-  const { t } = useLanguage()
+  const { t } = useLanguage();
   const pathname = usePathname();
 
   // Generate breadcrumb items
@@ -27,12 +29,30 @@ export function Header({ sidebarOpen, setSidebarOpen }: HeaderProps) {
 
   const breadcrumbItems = pathSegments.map((segment, index) => {
     const path = `../${pathSegments.slice(0, index + 1).join("/")}`;
-    const _segment = t('common.' + segment)
+    const _segment = t("common." + segment);
     return {
       name: _segment.charAt(0).toUpperCase() + segment.slice(1), // Capitalize first letter
       href: path,
     };
   });
+
+  // Wallet state
+  const [wallet, setWallet] = useState<any>(null);
+
+  const connectWallet = async () => {
+    const wallets = await onboard.connectWallet();
+    if (wallets.length > 0) {
+      console.log(wallets[0])
+      setWallet(wallets[0]); // Store connected wallet info
+    }
+  };
+
+  const disconnectWallet = async () => {
+    if (wallet) {
+      await onboard.disconnectWallet({ label: wallet.label });
+      setWallet(null);
+    }
+  };
 
   return (
     <header className="flex h-[55px] md:h-[50px] pt-0 shrink-0 items-center border-b border-transparent bg-background px-[11px] lg:px-[40px]">
@@ -53,14 +73,19 @@ export function Header({ sidebarOpen, setSidebarOpen }: HeaderProps) {
             {breadcrumbItems.map((item, index) => (
               <li key={item.href} className="flex items-center">
                 {index === breadcrumbItems.length - 1 ? (
-                  <span className="text-muted text-semibold text-[13px]">{item.name}</span>
+                  <span className="text-muted text-semibold text-[13px]">
+                    {item.name}
+                  </span>
                 ) : (
                   <Link
                     href={item.href}
                     className="text-muted text-semibold hover:text-primary text-[13px]"
                   >
                     {item.name}
-                    <span className="mx-2 text-muted text-semibold text-[13px]"> / </span>
+                    <span className="mx-2 text-muted text-semibold text-[13px]">
+                      {" "}
+                      /{" "}
+                    </span>
                   </Link>
                 )}
               </li>
@@ -77,9 +102,23 @@ export function Header({ sidebarOpen, setSidebarOpen }: HeaderProps) {
         <LanguageSelector />
         <NetworkSwitcher />
 
-        <CustomButton className="bg-[#2470ff] hover:bg-blue-700 text-[11px] rounded-[3px] cursor-pointer">
-          {t("common.connectWallet")}
-        </CustomButton>
+        {/* Connect Wallet Button */}
+        {wallet ? (
+          <CustomButton
+            onClick={disconnectWallet}
+            className="flex items-center gap-1 bg-foreground text-[11px] rounded-[3px] cursor-pointer hover:bg-accent"
+          >
+            <div className="w-[17px] h-[17px] rounded-full bg-gradient-to-br from-[#A5FECA] via-[#3EDCEB] via-[#2594FF] to-[#53F]"></div>
+            <span className="text-secondary">{shortenAddress(wallet.accounts[0].address)}</span>
+          </CustomButton>
+        ) : (
+          <CustomButton
+            onClick={connectWallet}
+            className="bg-[#2470ff] hover:bg-blue-700 text-[11px] rounded-[3px] cursor-pointer"
+          >
+            {t("common.connectWallet")}
+          </CustomButton>
+        )}
       </div>
     </header>
   );

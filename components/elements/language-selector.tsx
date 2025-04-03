@@ -27,7 +27,7 @@ export function LanguageSelector() {
         <Button
           variant="outline"
           size="sm"
-          className="bg-foreground h-[26px] rounded-[4px] text-secondary"
+          className="bg-foreground border-none h-[26px] rounded-[4px] text-secondary"
         >
           <Globe className="h-4 w-4 mr-2" />
           <span className="mr-1">{selectedLanguage.flag}</span>

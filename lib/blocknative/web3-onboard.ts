@@ -3,17 +3,24 @@ import coinbaseWallet from "@web3-onboard/coinbase";
 import walletConnectModule from "@web3-onboard/walletconnect";
 import trustWallet from "@web3-onboard/trust";
 import bitgetWallet from '@web3-onboard/bitget/dist/index';
-
+import metamask from '@web3-onboard/metamask'
 // Configure WalletConnect options
 const walletConnectOptions = {
   // Set your WalletConnect configuration options here
   projectId: process.env.WALLETCONNECT_PROJECT_ID || "1DSWHiAW1iSFYVb86WQQUPn57iQ6W1DjGo"
 };
 
+const metamaskOptions = {
+  options: {
+    dappMetadata: {}
+  }
+}
+
 const wallets = [
   coinbaseWallet(),
   trustWallet(),
   bitgetWallet(),
+  metamask(metamaskOptions),
   walletConnectModule(walletConnectOptions),
 ];
 
@@ -45,6 +52,7 @@ const onboard = Onboard({
       { name: "Coinbase Wallet", url: "https://www.coinbase.com/wallet" },
       { name: "Trust Wallet", url: "https://trustwallet.com/" },
       { name: "Bitget Wallet", url: "https://web3.bitget.com/" },
+      { name: "Metamask Wallet", url: "https://metamask.io/" },
       { name: "WalletConnect", url: "https://walletconnect.com/" },
     ],
   },

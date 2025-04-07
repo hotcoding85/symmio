@@ -1,10 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ConnectedChain } from "@web3-onboard/core/dist/types";
 
 // Define a type for the wallet state
 interface Wallet {
   label: string;
   accounts: { address: string }[];
-  provider: any;
+  chains?: ConnectedChain[];
+  provider?: any;
+  icon?: string;
 }
 
 interface WalletState {

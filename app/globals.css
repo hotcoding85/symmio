@@ -183,3 +183,7 @@
 .before-line::before {
   @apply block content-[''] absolute top-0 left-0 w-px h-full bg-accent;
 }
+
+.svelte-w5zexe {
+  display: none !important;
+}

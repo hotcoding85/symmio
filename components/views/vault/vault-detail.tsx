@@ -76,11 +76,12 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
   const [selectedIndexId, setSelectedIndexId] = useState<number | null>(null);
 
   useEffect(() => {
+    const API_BASE_URL = process.env.BACKEND_API || "https://miserable-georgie-hotcoding85-6ad5b67a.koyeb.app"
     const fetchData = async () => {
       setIsLoading(true);
       try {
         const response = await axios(
-          `https://miserable-georgie-hotcoding85-6ad5b67a.koyeb.app/indices/getHistoricalData`
+          `${API_BASE_URL}/indices/getHistoricalData`
         );
         const data = response.data;
         setIndexData(data);

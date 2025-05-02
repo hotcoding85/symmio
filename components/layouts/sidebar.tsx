@@ -15,10 +15,12 @@ import FundMakerSvg from "../icons/fundmakerSvg";
 import FundMakerDoc from "../icons/fundmakerDoc";
 import Feedback from "../icons/feedback";
 import TOS from "../icons/tos";
-import Blockchain from "../icons/blockchain";
+import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
 import { ThemeToggle } from "../theme-toggle";
 import { useTheme } from "next-themes";
+import Logo from "../icons/logo";
+import DARK from '../../public/logo/dark.png'
 
 interface SidebarProps {
   open: boolean;
@@ -87,17 +89,17 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
         >
           <Link href="/" className="flex items-center">
             {collapsed ? (
-              //   <Image
-              //     src={DARK}
-              //     alt={"LOGO"}
-              //     width={30}
-              //     height={12}
-              //     className="object-none text-primary"
-              //   />
-              <Blockchain
-                className="w-6 h-6 dark:text-ring"
-                color={theme == "dark" ? "#D0CECE" : "#2470ff"}
-              />
+                <Image
+                  src={DARK}
+                  alt={"LOGO"}
+                  width={30}
+                  height={12}
+                  className="object-none text-primary"
+                />
+              // <Logo
+              //   className="w-40 h-6 dark:text-ring"
+              //   color={theme == "dark" ? "#D0CECE" : "#2470ff"}
+              // />
             ) : (
               //   <Image
               //     src={DARK}
@@ -106,8 +108,8 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
               //     height={24}
               //     className="text-primary"
               //   />
-              <Blockchain
-                className="w-6 h-6 dark:text-ring"
+              <Logo
+                className="w-36 h-6 dark:text-ring"
                 color={theme == "dark" ? "#D0CECE" : "#2470ff"}
               />
             )}
@@ -138,7 +140,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
               icon={TrendingUp}
               collapsed={collapsed}
             >
-              {t("common.earn")}
+              {t("common.index")}
             </NavItem>
             <NavItem
               href="/ecosystem"
@@ -148,7 +150,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
               collapsed={collapsed}
               iconClassName={"p-[1px]"}
             >
-              {t("common.ecosystem")}
+              {t("common.curators")}
             </NavItem>
           </nav>
 
@@ -170,27 +172,28 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                 {t("common.analytics")}
               </NavItem>
               <NavItem
-                href="https://app.morpho.org/"
+                href="https://www.symm.io/"
                 icon={FundMakerSvg}
                 external
                 className="text-muted h-[28px] px-[6px] py-[2px]"
                 collapsed={collapsed}
                 iconClassName="mr-[2px]"
               >
-                {t("common.fundmakerAppV2")}
+                {t("common.marketInsights")}
               </NavItem>
               <NavItem
-                href="https://delegate.morpho.org/"
+                href="https://www.symm.io/"
                 icon={FundMakerSvg}
                 external
                 className="text-muted h-[28px] px-[6px] py-[2px]"
                 collapsed={collapsed}
                 iconClassName="mr-[2px]"
               >
-                {t("common.delegate")}
+                {t("common.responsibleInvesting")}
               </NavItem>
+              
               <NavItem
-                href="https://docs.morpho.org/"
+                href="https://www.symm.io/"
                 icon={FundMakerDoc}
                 external
                 className="text-muted h-[28px] px-[6px] py-[2px]"
@@ -200,16 +203,6 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                 {t("common.fundmakerDocs")}
               </NavItem>
               <NavItem
-                href="https://optimizers.morpho.org/"
-                icon={FundMakerSvg}
-                external
-                className="text-muted h-[28px] px-[6px] py-[2px]"
-                collapsed={collapsed}
-                iconClassName="mr-[2px]"
-              >
-                {t("common.fundmakerOptimizers")}
-              </NavItem>
-              <NavItem
                 href="https://docs.google.com/forms/d/e/1FAIpQLSc3ZpfvlcBmMgCDfg6ahM6cKNm003bbns5Ao6QfXJNfcfpATw/viewform?embedded=true"
                 icon={Feedback}
                 external
@@ -217,7 +210,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                 collapsed={collapsed}
                 iconClassName="mr-[2px]"
               >
-                {t("common.feedback")}
+                {t("common.support")}
               </NavItem>
               <NavItem
                 href="https://cdn.morpho.org/documents/FundMaker_Terms_of_Use.pdf"

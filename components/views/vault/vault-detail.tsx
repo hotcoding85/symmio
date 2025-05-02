@@ -5,7 +5,9 @@ import { useMediaQuery } from "react-responsive";
 import Link from "next/link";
 import {
   ArrowUpRight,
+  Check,
   CheckCircle,
+  ChevronDown,
   Copy,
   Eye,
   EyeOff,
@@ -21,7 +23,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import type { Vault } from "@/lib/types/vault";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dashboard from "../Dashboard/dashboard";
 import { toast } from "sonner";
 import { VaultAllocationBreakdown } from "@/components/elements/vault-allocation-breakdown";
@@ -46,13 +48,86 @@ import Image from "next/image";
 import { useLanguage } from "@/contexts/language-context";
 import { VaultLiteratureSection } from "./vault-literature";
 import { cn } from "@/lib/utils";
+import { PerformanceChart } from "@/components/elements/performance-chart";
+import { TimePeriodSelector } from "@/components/elements/time-period";
+import axios from "axios";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 interface VaultDetailPageProps {
   vault: Vault;
 }
-
+interface IndexData {
+  name: string;
+  indexId: number;
+  rawData: any[];
+  chartData: {
+    name: string;
+    date: string;
+    value: number;
+    price?: number;
+  }[];
+}
 export function VaultDetailPage({ vault }: VaultDetailPageProps) {
   const { t } = useLanguage();
   const isMobile = useMediaQuery({ maxWidth: 1540 });
+
+  const [selectedPeriod, setSelectedPeriod] = useState<string>("all");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [indexData, setIndexData] = useState<IndexData[]>([]);
+  const [selectedIndexId, setSelectedIndexId] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await axios(
+          `https://miserable-georgie-hotcoding85-6ad5b67a.koyeb.app/indices/getHistoricalData`
+        );
+        const data = response.data;
+        setIndexData(data);
+        if (data.length > 0) {
+          setSelectedIndexId(data[0].indexId);
+        }
+      } catch (error) {
+        console.error("Error fetching performance data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredData = (indexId: number) => {
+    const index = indexData.find((item) => item.indexId === indexId);
+    if (!index) return [];
+
+    const now = new Date();
+    let cutoffDate = new Date(0); // All time
+
+    switch (selectedPeriod) {
+      case "ytd":
+        cutoffDate = new Date(now.getFullYear(), 0, 1);
+        break;
+      case "6m":
+        cutoffDate = new Date(now.setMonth(now.getMonth() - 6));
+        break;
+      case "1y":
+        cutoffDate = new Date(now.setFullYear(now.getFullYear() - 1));
+        break;
+      case "3y":
+        cutoffDate = new Date(now.setFullYear(now.getFullYear() - 3));
+        break;
+      case "5y":
+        cutoffDate = new Date(now.setFullYear(now.getFullYear() - 5));
+        break;
+      case "10y":
+        cutoffDate = new Date(now.setFullYear(now.getFullYear() - 10));
+        break;
+    }
+
+    return index.chartData.filter((item) => new Date(item.date) >= cutoffDate);
+  };
+
   const copyToClipboard = (text: string, type: string) => {
     navigator.clipboard.writeText(text);
     toast(type + " copied to clipboard.", {
@@ -254,7 +329,9 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
               </InfoMobileCard>
 
               <InfoMobileCard title={t("table.performanceFee")}>
-                <div className="text-sm text-secondary">{vault.performanceFee}</div>
+                <div className="text-sm text-secondary">
+                  {vault.performanceFee}
+                </div>
               </InfoMobileCard>
 
               <InfoMobileCard title={t("table.vaultAddress")}>
@@ -465,6 +542,56 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
           )}
         </div>
 
+        {/* Chart */}
+        <div className="pt-20">
+          <h2 className="lg:text-[20px] text-[16px] mb-4 text-primary font-custom">
+            Index Performance
+          </h2>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-secondary mb-2">
+              Choose Index
+            </label>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="flex items-center justify-between w-full px-3 py-2 text-sm text-left rounded-md border border-secondary text-primary bg-background hover:bg-muted"
+                >
+                  {indexData.find((i) => i.indexId === selectedIndexId)?.name || "Select Index"}
+                  <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-[400px] xs-[200px] bg-foreground border-none text-sm text-secondary">
+                {indexData.map((index) => (
+                  <DropdownMenuItem
+                    key={index.indexId}
+                    onClick={() => setSelectedIndexId(index.indexId)}
+                    className="flex items-center justify-between active:bg-[#fafafa20] p-4"
+                  >
+                    <span>{index.name}</span>
+                    {selectedIndexId === index.indexId && <Check className="h-4 w-4" />}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <TimePeriodSelector
+            selectedPeriod={selectedPeriod}
+            onPeriodChange={setSelectedPeriod}
+          />
+
+          {selectedIndexId && (
+            <div className="bg-background p-4 rounded-lg shadow">
+              <PerformanceChart
+                data={filteredData(selectedIndexId)}
+                indexId={selectedIndexId}
+              />
+            </div>
+          )}
+        </div>
+
         {/* Vault Literature */}
         <div className="pt-20">
           <h2 className="lg:text-[20px] text-[16px] mb-4 text-primary font-custom">
@@ -580,7 +707,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="search"
-                      placeholder={t('common.searchProperties')}
+                      placeholder={t("common.searchProperties")}
                       className="pl-8 py-[10px] !shadow-none bg-foreground border-zinc-700 text-card"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -593,7 +720,9 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                       key={column.id}
                       className="flex items-center justify-between py-2 px-3 h-[36px] hover:bg-accent rounded-sm"
                     >
-                      <span className="text-[12px]">{t('table.' + column.id)}</span>
+                      <span className="text-[12px]">
+                        {t("table." + column.id)}
+                      </span>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -647,7 +776,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="search"
-                      placeholder={t('common.searchProperties')}
+                      placeholder={t("common.searchProperties")}
                       className="pl-8 py-[10px] !shadow-none bg-foreground border-zinc-700 text-primary"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -660,7 +789,9 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                       key={column.id}
                       className="flex items-center justify-between py-2 px-3 h-[36px] hover:bg-accent rounded-sm"
                     >
-                      <span className="text-[12px]">{t('table.' + column.id)}</span>
+                      <span className="text-[12px]">
+                        {t("table." + column.id)}
+                      </span>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -728,7 +859,7 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                       <Input
                         type="search"
-                        placeholder={t('common.searchProperties')}
+                        placeholder={t("common.searchProperties")}
                         className="pl-8 py-[10px] !shadow-none bg-foreground border-zinc-700 text-primary"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
@@ -741,7 +872,9 @@ export function VaultDetailPage({ vault }: VaultDetailPageProps) {
                         key={column.id}
                         className="flex items-center justify-between py-2 px-3 h-[36px] hover:bg-accent rounded-sm"
                       >
-                        <span className="text-[12px]">{t('table.' + column.id)}</span>
+                        <span className="text-[12px]">
+                          {t("table." + column.id)}
+                        </span>
                         <Button
                           variant="ghost"
                           size="icon"
@@ -861,7 +994,9 @@ const CuratorInfo = ({
         <div className="text-[11px]">{curator.name.charAt(0)}</div>
       )}
     </div>
-    <span className="text-secondary text-[13px] font-normal">{curator.name}</span>
+    <span className="text-secondary text-[13px] font-normal">
+      {curator.name}
+    </span>
     {curator.url && (
       <Link href={curator.url} target="_blank">
         <ArrowUpRight className="h-4 w-4 text-zinc-400" />
@@ -893,7 +1028,9 @@ const TokenInfo = ({
         <div className="text-[11px]">{token.symbol.charAt(0)}</div>
       )}
     </div>
-    <span className="text-secondary text-[13px] font-normal">{token.symbol}</span>
+    <span className="text-secondary text-[13px] font-normal">
+      {token.symbol}
+    </span>
   </div>
 );
 
@@ -926,7 +1063,9 @@ const TokenValue = ({
           <div className="text-[11px]">{token.symbol.charAt(0)}</div>
         )}
       </div>
-      <span className="text-secondary text-[13px] font-normal">{value.amount}</span>
+      <span className="text-secondary text-[13px] font-normal">
+        {value.amount}
+      </span>
     </div>
     <div className="text-[11px] text-secondary px-1 bg-accent">
       {value.usdValue}

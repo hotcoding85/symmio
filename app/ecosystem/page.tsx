@@ -42,9 +42,9 @@ const EcosystemClient = () => {
         </div>
 
         {loading ? (
-          <div className="grid gap-3 py-10">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 custom-3xl-grid gap-3 py-10">
             {[...Array(4)].map((_, i) => (
-              <div key={`skeleton-${i}`} className="h-64 bg-gray-100 rounded-lg animate-pulse" />
+              <div key={`skeleton-${i}`} className="h-64 bg-foreground rounded-lg animate-pulse" />
             ))}
           </div>
         ) : (

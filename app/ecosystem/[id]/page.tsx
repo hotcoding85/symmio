@@ -1,20 +1,20 @@
 "use client";
 import { ProjectDetailPage } from "@/components/views/ecosystem/project-detail";
-import { projects } from "@/lib/data";
 import { notFound, useParams } from "next/navigation";
+import dynamic from "next/dynamic";
 
-export default function ProjectPage() {
+const ProjectPageContent = () => {
   const params = useParams();
   const project_id = params.id?.toString();
+  
   if (!project_id) {
-    return notFound(); // Handle missing params
+    notFound();
   }
 
-  const project = projects.find((p) => p.id === project_id);
+  return <ProjectDetailPage projectId={project_id} />;
+};
 
-  if (!project) {
-    return notFound(); // Show 404 if project is not found
-  }
-
-  return <ProjectDetailPage project={project} />;
-}
+// Disable SSR completely for this page
+export default dynamic(() => Promise.resolve(ProjectPageContent), {
+  ssr: false
+});

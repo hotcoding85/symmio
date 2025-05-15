@@ -39,8 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-/Backend
-/public/logos
 /Backend/artifacts
 /Backend/cache
 /Backend/typechain-types

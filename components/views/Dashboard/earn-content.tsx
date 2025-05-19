@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import axios from "axios";
 import { IndexListEntry } from "@/types";
 import { setIndices } from "@/redux/indexSlice";
+import { fetchAllIndices } from "@/api/indices";
 
 type ColumnType = {
   id: string;
@@ -66,12 +67,11 @@ export function EarnContent({ onSupplyClick }: EarnContentProps) {
 
   const storedIndexes = useSelector((state: RootState) => state.index.indices);
   useEffect(() => {
-    const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API || "http://localhost:5001";
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios(`${API_BASE_URL}/indices/getIndexLists`);
-        const data = response.data;
+        const response = await fetchAllIndices()
+        const data = response;
         setIndexLists(data);
         dispatch(setIndices(data))
       } catch (error) {

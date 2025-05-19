@@ -51,14 +51,9 @@ import { cn, shortenAddress } from "@/lib/utils";
 import { PerformanceChart } from "@/components/elements/performance-chart";
 import { TimePeriodSelector } from "@/components/elements/time-period";
 import axios from "axios";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
 import { IndexListEntry } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
+import { fetchBtcHistoricalData, fetchHistoricalData } from "@/api/indices";
 interface VaultDetailPageProps {
   index: IndexListEntry | null;
 }
@@ -68,7 +63,7 @@ interface ChartDataPoint {
   value: number;
   price?: number;
 }
-interface IndexData {
+export interface IndexData {
   name: string;
   indexId: number;
   rawData: any[];
@@ -87,15 +82,12 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
   const [showComparison, setShowComparison] = useState(false);
 
   useEffect(() => {
-    const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API || "http://localhost:5001";
-    const fetchData = async () => {
+    const fetchData = async (indexId: number) => {
       setIsLoading(true);
       try {
-        const response = await axios(
-          `${API_BASE_URL}/indices/getHistoricalData/${index?.indexId}`
-        );
-        const data = response.data;
-        setIndexData(data);
+        const response = await fetchHistoricalData(indexId);
+        const data = response;
+        data && setIndexData(data);
       } catch (error) {
         console.error("Error fetching performance data:", error);
       } finally {
@@ -103,16 +95,13 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
       }
     };
 
-    index?.indexId && fetchData();
+    index?.indexId && fetchData(index.indexId);
 
-    const fetchBtcHistoricalData = async () => {
-      const API_BASE_URL = process.env.BACKEND_API || "http://localhost:5001";
+    const _fetchBtcHistoricalData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios(
-          `${API_BASE_URL}/indices/fetchBtcHistoricalData`
-        );
-        const data = response.data;
+        const response = await fetchBtcHistoricalData()
+        const data = response;
         setBtcData(data);
       } catch (error) {
         console.error("Error fetching performance data:", error);
@@ -120,7 +109,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
         setIsLoading(false);
       }
     };
-    index?.indexId && fetchBtcHistoricalData();
+    index?.indexId && _fetchBtcHistoricalData();
   }, [index]);
 
   const getCutoffDate = () => {

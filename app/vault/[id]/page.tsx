@@ -7,6 +7,7 @@ import axios from "axios";
 import { setIndices } from "@/redux/indexSlice";
 import { IndexListEntry } from "@/types";
 import { useEffect, useState } from "react";
+import { fetchAllIndices } from "@/api/indices";
 
 export default function VaultPage() {
   const params = useParams();
@@ -35,9 +36,8 @@ export default function VaultPage() {
     // If not found in Redux, fetch from API
     const fetchData = async () => {
       try {
-        const API_BASE_URL = process.env.BACKEND_API || "http://localhost:5001";
-        const response = await axios(`${API_BASE_URL}/indices/getIndexLists`);
-        const data: IndexListEntry[] = response.data;
+        const response = await fetchAllIndices();
+        const data: IndexListEntry[] = response;
         dispatch(setIndices(data));
 
         const foundIndex = data.find(

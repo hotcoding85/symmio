@@ -359,7 +359,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                       <FundMaker className="h-5 w-5" />
                     </div>
                     <span className="text-secondary text-[15px] font-normal">
-                      {"SYMMIO" || vault.curator.name}
+                      {"SYMMIO"}
                     </span>
                     {(
                       <Link
@@ -378,15 +378,15 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                   <div className="flex items-center gap-2">
                     <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
                       <Image
-                        src={"https://cdn.morpho.org/assets/logos/usdc.svg" || vault.token.icon || "/placeholder.svg"}
-                        alt={"USDC" || vault.token.symbol}
+                        src={"https://cdn.morpho.org/assets/logos/usdc.svg"}
+                        alt={"USDC"}
                         className="object-cover w-full h-full"
                         width={17}
                         height={17}
                       />
                     </div>
                     <span className="text-secondary text-[15px] font-normal">
-                      {"USDC" || vault.token.symbol}
+                      {"USDC"}
                     </span>
                     {USDC_ADDRESS_IN_BASE && (
                       <Button
@@ -412,8 +412,8 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                     <div className="flex items-center gap-2">
                       <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
                         <Image
-                          src={"https://cdn.morpho.org/assets/logos/usdc.svg" || vault.token.icon || "/placeholder.svg"}
-                          alt={"USDC" || vault.token.symbol}
+                          src={"https://cdn.morpho.org/assets/logos/usdc.svg"}
+                          alt={"USDC"}
                           className="object-cover w-full h-full"
                           width={17}
                           height={17}
@@ -474,8 +474,8 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                     <div className="flex items-center gap-2">
                       <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-foreground flex items-center justify-center">
                         <Image
-                          src={"https://cdn.morpho.org/assets/logos/usdc.svg" || vault.token.icon || "/placeholder.svg"}
-                          alt={"USDC" || vault.token.symbol}
+                          src={"https://cdn.morpho.org/assets/logos/usdc.svg"}
+                          alt={"USDC"}
                           className="object-cover w-full h-full"
                           width={17}
                           height={17}
@@ -1129,18 +1129,18 @@ const TokenInfo = ({
     <div className="relative h-5 w-5 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
       {token.icon ? (
         <Image
-          src={"https://cdn.morpho.org/assets/logos/usdc.svg" || token.icon}
-          alt={"USDC" || token.symbol}
+          src={"https://cdn.morpho.org/assets/logos/usdc.svg"}
+          alt={"USDC"}
           className="w-full h-full"
           width={20}
           height={20}
         />
       ) : (
-        <div className="text-[11px]">{"USDC" || token.symbol.charAt(0)}</div>
+        <div className="text-[11px]">{"USDC"}</div>
       )}
     </div>
     <span className="text-secondary text-[13px] font-normal">
-      {"USDC" || token.symbol}
+      {"USDC"}
     </span>
   </div>
 );
@@ -1161,7 +1161,7 @@ const TokenValue = ({
       <div className="relative h-5 w-5 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
         {token.icon ? (
           <Image
-            src={"https://cdn.morpho.org/assets/logos/usdc.svg" || token.icon}
+            src={"https://cdn.morpho.org/assets/logos/usdc.svg"}
             alt={token.symbol}
             className="w-full h-full"
             width={20}

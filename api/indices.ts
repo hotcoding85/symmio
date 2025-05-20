@@ -3,10 +3,10 @@ import { IndexData } from "@/components/views/vault/vault-detail";
 import { IndexListEntry } from "@/types";
 import axios from "axios";
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_API;
 
 export const fetchAllIndices = async (): Promise<IndexListEntry[]> => {
-  const response = await fetch(`/indices/getIndexLists`);
+  const response = await fetch(`${API_BASE_URL}/indices/getIndexLists`);
 
   if (!response.ok) {
     console.log("Failed to fetch indices");
@@ -18,7 +18,7 @@ export const fetchAllIndices = async (): Promise<IndexListEntry[]> => {
 export const fetchIndexByTicker = async (
   ticker: string
 ): Promise<IndexListEntry> => {
-  const response = await fetch(`/indices/by-ticker/${ticker}`);
+  const response = await fetch(`${API_BASE_URL}/indices/by-ticker/${ticker}`);
 
   if (response.status === 404) {
     console.log("Index not found");
@@ -33,7 +33,7 @@ export const fetchIndexByTicker = async (
 
 export const fetchBtcHistoricalData = async (): Promise<any[]> => {
   const response = await fetch(
-    `/indices/fetchBtcHistoricalData`
+    `${API_BASE_URL}/indices/fetchBtcHistoricalData`
   );
 
   if (!response.ok) {
@@ -47,7 +47,7 @@ export const fetchHistoricalData = async (
   indexId: string | number
 ): Promise<IndexData> => {
   const response = await fetch(
-    `/indices/getHistoricalData/${indexId}`
+    `${API_BASE_URL}/indices/getHistoricalData/${indexId}`
   );
 
   if (!response.ok) {
@@ -63,7 +63,7 @@ export const downloadRebalanceData = async (
 ): Promise<void> => {
   try {
     const response = await axios.get(
-      `/indices/downloadRebalanceData/${indexId}`,
+      `${API_BASE_URL}/indices/downloadRebalanceData/${indexId}`,
       {
         responseType: "blob", // Important for file downloads
       }

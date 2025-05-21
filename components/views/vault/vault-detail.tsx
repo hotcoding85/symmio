@@ -866,7 +866,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
 
           {/* TOS */}
           <div className="pt-16">
-            <div className="grid grid-cols-1 p-3 bg-foreground">
+            <div className="grid grid-cols-1">
               <div className="col-span-1">
                 <h4 className="text-[13px] pb-2 pt-3 font-bold text-primary">
                   Note on the Fund management company and the fund

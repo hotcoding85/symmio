@@ -76,7 +76,8 @@ export function VaultTable({
   };
 
   const assetDetail = (vault: IndexListEntry) => {
-    router.push("./vault/" + vault?.ticker);
+    if (!vault.ticker) return
+    router.push("/vault/" + vault?.ticker);
   };
 
   // Determine if a column is sortable

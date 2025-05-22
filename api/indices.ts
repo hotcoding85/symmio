@@ -45,12 +45,25 @@ export const fetchBtcHistoricalData = async (): Promise<any[]> => {
 
 export const fetchEthHistoricalData = async (): Promise<any[]> => {
   const response = await fetch(
-    `${API_BASE_URL}/indices/fetchEthHistoricalData1`
+    `${API_BASE_URL}/indices/fetchEthHistoricalData`
   );
 
   if (!response.ok) {
     console.log("Failed to fetch ETH historical data");
-    return []
+    return [];
+  }
+
+  return response.json();
+};
+
+export const fetchVaultAssets = async (indexId: number): Promise<any[]> => {
+  const response = await fetch(
+    `${API_BASE_URL}/indices/fetchVaultAssets/${indexId}`
+  );
+
+  if (!response.ok) {
+    console.log("Failed to fetch Index assets data");
+    return [];
   }
 
   return response.json();

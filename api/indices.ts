@@ -45,11 +45,12 @@ export const fetchBtcHistoricalData = async (): Promise<any[]> => {
 
 export const fetchEthHistoricalData = async (): Promise<any[]> => {
   const response = await fetch(
-    `${API_BASE_URL}/indices/fetchEthHistoricalData`
+    `${API_BASE_URL}/indices/fetchEthHistoricalData1`
   );
 
   if (!response.ok) {
     console.log("Failed to fetch ETH historical data");
+    return []
   }
 
   return response.json();

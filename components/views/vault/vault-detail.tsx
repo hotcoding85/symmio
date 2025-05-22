@@ -108,7 +108,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
         const data = response;
         setBtcData(data);
       } catch (error) {
-        console.error("Error fetching performance data:", error);
+        console.error("Error fetching btc data:", error);
       } finally {
         setIsLoading(false);
       }
@@ -122,7 +122,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
         const data = response;
         setEthData(data);
       } catch (error) {
-        console.error("Error fetching performance data:", error);
+        console.error("Error fetching eth data:", error);
       } finally {
         setIsLoading(false);
       }

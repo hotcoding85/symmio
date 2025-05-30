@@ -16,7 +16,6 @@ export default function VaultPage() {
   const [loading, setLoading] = useState(true);
   const storedIndexes = useSelector((state: RootState) => state.index.indices);
   const dispatch = useDispatch();
-
   useEffect(() => {
     if (!indexTicker) {
       notFound();
@@ -63,7 +62,6 @@ export default function VaultPage() {
   if (loading) {
     return <VaultDetailPage index={null} />;
   }
-
   if (!vault) {
     notFound();
   }

@@ -69,6 +69,7 @@ export const fetchVaultAssets = async (indexId: number): Promise<any[]> => {
   return response.json();
 };
 
+
 export const fetchHistoricalData = async (
   indexId: string | number
 ): Promise<IndexData> => {

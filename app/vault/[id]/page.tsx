@@ -16,6 +16,7 @@ export default function VaultPage() {
   const [loading, setLoading] = useState(true);
   const storedIndexes = useSelector((state: RootState) => state.index.indices);
   const dispatch = useDispatch();
+  console.log(indexTicker)
   useEffect(() => {
     if (!indexTicker) {
       notFound();
@@ -36,7 +37,7 @@ export default function VaultPage() {
     const fetchData = async () => {
       try {
         const response = await fetchAllIndices();
-        const data: IndexListEntry[] = response;
+        const data: IndexListEntry[] = response || [];
         dispatch(setIndices(data));
 
         const foundIndex = data.find(

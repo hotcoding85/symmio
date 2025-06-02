@@ -383,7 +383,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                 {/* Curator */}
                 <InfoCard title={t("table.curator")}>
                   <div className="flex items-center gap-2">
-                    <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
+                    <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-transparent flex items-center justify-center">
                       <FundMaker className="h-5 w-5 text-muted" />
                     </div>
                     <span className="text-secondary text-[15px] font-normal">

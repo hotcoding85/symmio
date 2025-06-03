@@ -19,7 +19,7 @@ import {
   setSelectedNetwork as setReduxSelectedNetwork,
   setCurrentChainId as setReduxCurrentChainId,
 } from "@/redux/networkSlice";
-import { shortenAddress } from "@/lib/utils";
+import { cn, shortenAddress } from "@/lib/utils";
 import { RootState } from "@/redux/store";
 import NavigationAlert from "../icons/navigation-alert";
 import {
@@ -62,6 +62,10 @@ export function Header({
     (state: RootState) => state.network
   );
   const storedWallet = useSelector((state: RootState) => state.wallet.wallet);
+
+  const selectedVault = useSelector(
+    (state: RootState) => state.vault.selectedVault
+  );
 
   const defaultNetwork =
     networks.find((n) => n.id === searchParams.get("network")) || networks[0];
@@ -189,7 +193,6 @@ export function Header({
         console.log("Connected Wallet:", connected[0]);
 
         dispatch(setWallet({ label, accounts, chains, icon })); // Store only serializable parts
-
       }
     }
   }, [storedWallet, dispatch, switchOption]);
@@ -349,23 +352,29 @@ export function Header({
             </PopoverContent>
           </Popover>
         ) : (
-          <CustomButton
-            onClick={connectWallet}
-            className="bg-[#3153fb] hover:bg-blue-700 text-[11px] rounded-[3px] cursor-pointer"
-          >
-            {t("common.connectWallet")}
-          </CustomButton>
+          <>
+            <CustomButton
+              onClick={connectWallet}
+              className="bg-[#2470ff] hover:bg-blue-700 text-[11px] rounded-[3px] cursor-pointer"
+            >
+              {t("common.connectWallet")}
+            </CustomButton>
+          </>
         )}
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="lg:hidden"
-          onClick={() => setRightbarOpen(!rightbarOpen)}
-        >
-          <NavigationAlert className="h-7 w-7 text-primary" />
-          <span className="sr-only">Toggle Right</span>
-        </Button>
+        {selectedVault.length > 0 ? (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            onClick={() => setRightbarOpen(!rightbarOpen)}
+          >
+            <NavigationAlert className="h-7 w-7 text-primary" />
+            <span className="sr-only">Toggle Right</span>
+          </Button>
+        ) : (
+          <></>
+        )}
 
         <NetworkMismatchModal
           isOpen={showModal}

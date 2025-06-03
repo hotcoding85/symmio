@@ -59,11 +59,11 @@ export const TimePeriodSelector: React.FC<TimePeriodSelectorProps> = ({
 
   const getButtonColor = () => {
     if (showComparison && !showETHComparison) {
-      return "bg-[#2470ff] hover:bg-blue-700"; // BTC blue
+      return "bg-[#2470ff] hover:bg-blue-700 text-white"; // BTC blue
     } else if (!showComparison && showETHComparison) {
-      return "bg-[#e95f6a] hover:bg-red-700"; // ETH red
+      return "bg-[#e95f6a] hover:bg-red-700 text-white"; // ETH red
     } else {
-      return "bg-gray-600 hover:bg-gray-700"; // Default gray
+      return ""; // Default gray
     }
   };
 
@@ -76,8 +76,8 @@ export const TimePeriodSelector: React.FC<TimePeriodSelectorProps> = ({
             onClick={() => onPeriodChange(period.value)}
             className={`px-3 py-1 rounded-md text-sm ${
               selectedPeriod === period.value
-                ? "bg-blue-500 text-primary"
-                : "bg-foreground text-secondary hover:text-secondary"
+                ? "bg-[#2470ff] text-white"
+                : "bg-foreground text-secondary hover:text-white"
             }`}
           >
             {period.label}
@@ -87,7 +87,8 @@ export const TimePeriodSelector: React.FC<TimePeriodSelectorProps> = ({
       <div className="flex gap-2">
         <CustomButton
           onClick={handleComparisonToggle}
-          className={`h-[26px] px-[8px] py-[5px] font-medium transition-colors text-white ${getButtonColor()} text-[11px] rounded-[3px] cursor-pointer`}
+          variant="secondary"
+          className={`h-[26px] px-[8px] py-[5px] font-medium transition-colors text-primary ${getButtonColor()} text-[11px] rounded-[3px] cursor-pointer`}
         >
           {getButtonText()}
         </CustomButton>

@@ -56,6 +56,12 @@ import {
 } from "@/api/indices";
 import FundMaker from "@/components/icons/fundmaker";
 import { VaultAssets } from "@/components/elements/vault-assets";
+import FundDetail from "./fund-details";
+import FundManager from "./fund-manager";
+import FundOverview from "./fund-overview";
+import PortfolioManagerInsights from "./portfolio-manager-insignts";
+import Risk from "./fund-risk";
+import FundRiskReturn from "./fund-risk-return";
 interface VaultDetailPageProps {
   index: IndexListEntry | null;
 }
@@ -77,6 +83,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
   const { t } = useLanguage();
   const vault = mockup_vaults[0];
   const isMobile = useMediaQuery({ maxWidth: 1540 });
+  const isSmallWindow = useMediaQuery({ maxWidth: 1024 });
   const [selectedPeriod, setSelectedPeriod] = useState<string>("all");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [indexData, setIndexData] = useState<IndexData | null>(null);
@@ -85,7 +92,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
   const [selectedIndexId, setSelectedIndexId] = useState<number | null>(null);
   const [showComparison, setShowComparison] = useState(false);
   const [showETHComparison, setShowETHComparison] = useState(false);
-  const [indexAssets, setIndexAssets] = useState<VaultAsset[]>([])
+  const [indexAssets, setIndexAssets] = useState<VaultAsset[]>([]);
   useEffect(() => {
     const fetchData = async (indexId: number) => {
       setIsLoading(true);
@@ -283,18 +290,12 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
             >
               <div
                 className={cn(
-                  "h-[100px] min-w-[100px] rounded-full overflow-hidden bg-transparent p-[6.6px] flex items-center justify-center",
+                  "h-[104px] min-w-[104px] rounded-full overflow-hidden bg-foreground p-[12px] flex items-center justify-center",
                   isMobile ? "" : ""
                 )}
               >
                 {vault.icon ? (
-                  <Image
-                    src={vault.icon || "/placeholder.svg"}
-                    alt={vault.name}
-                    className="object-cover w-full h-full rounded-full"
-                    width={87}
-                    height={87}
-                  />
+                  <FundMaker className="w-[80px] h-[80px] text-muted" />
                 ) : (
                   <div className="text-4xl">
                     {vault.token.symbol.charAt(0) || ""}
@@ -320,7 +321,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-transparent flex items-center justify-center">
-                      <FundMaker className="w-[17px] h-[17px]" />
+                      <FundMaker className="w-[17px] h-[17px] text-muted" />
                     </div>
                     <span className="text-secondary text-[20px]">
                       {"SYMMIO"}
@@ -337,10 +338,10 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
             </div>
           </div>
 
-          {/* Vault Info */}
+          {/* Index Info */}
           <div className="pt-20">
             <h2 className="lg:text-[20px] text-[16px] mb-4 text-primary font-custom">
-              {t("common.vaultInfo")}
+              {t("common.indexInfo")}
             </h2>
             {isMobile ? (
               <div className="grid grid-cols-1 md:gird md:grid-cols-2 rounded-[8px] bg-foreground px-[10px] md:px-5 md:[&>:nth-child(2n+1)]:pr-10 md:[&>:nth-child(2n)]:pl-10">
@@ -389,8 +390,8 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                 {/* Curator */}
                 <InfoCard title={t("table.curator")}>
                   <div className="flex items-center gap-2">
-                    <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
-                      <FundMaker className="h-5 w-5" />
+                    <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-transparent flex items-center justify-center">
+                      <FundMaker className="h-5 w-5 text-muted" />
                     </div>
                     <span className="text-secondary text-[15px] font-normal">
                       {"SYMMIO"}
@@ -556,10 +557,24 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
             )}
           </div>
 
+          {/* Index Overview */}
+          <div className="pt-20">
+              <h2 className="lg:text-[20px] text-[16px] mb-4 text-primary font-custom">
+                {t("common.indexOverview")}
+              </h2>
+            <div className="flex flex-wrap gap-6 flex-responsive">
+              <FundDetail />
+              <FundManager />
+              <FundOverview />
+              <PortfolioManagerInsights />
+              <FundRiskReturn />
+              <Risk />
+            </div>
+          </div>
           {/* Chart */}
           <div className="pt-20">
             <h2 className="lg:text-[20px] text-[16px] mb-4 text-primary font-custom">
-              Index Performance
+              {t("common.indexPerformance")}
             </h2>
 
             <TimePeriodSelector
@@ -572,7 +587,12 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
             />
 
             {indexData && (
-              <div className="bg-background p-4 rounded-lg shadow">
+              <div
+                className={cn(
+                  "bg-background rounded-lg shadow",
+                  isSmallWindow ? "" : "p-4"
+                )}
+              >
                 <PerformanceChart
                   data={filteredChartData()}
                   indexId={index.indexId}
@@ -831,10 +851,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                 </PopoverContent>
               </Popover>
             </h1>
-            <VaultAssets
-              assets={indexAssets}
-              visibleColumns={visibleColumns}
-            />
+            <VaultAssets assets={indexAssets} visibleColumns={visibleColumns} />
           </div>
 
           <div className="pt-16">
@@ -1227,8 +1244,8 @@ function InfoMobileCard({ title, tooltip, children }: InfoCardProps) {
 
 const CuratorInfo = ({ curator }: { curator: string }) => (
   <div className="flex items-center gap-2">
-    <div className="relative h-5 w-5 rounded-full overflow-hidden bg-zinc-800 flex items-center justify-center">
-      <FundMaker className="h-5 w-5" />
+    <div className="relative h-5 w-5 rounded-full overflow-hidden bg-forground flex items-center justify-center">
+      <FundMaker className="h-5 w-5 text-muted" />
     </div>
     <span className="text-secondary text-[13px] font-normal">{"SYMMIO"}</span>
     {

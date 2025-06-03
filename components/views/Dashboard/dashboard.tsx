@@ -9,6 +9,7 @@ import { mockup_vaults } from "@/lib/data";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { addSelectedVault, clearSelectedVault } from "@/redux/vaultSlice";
+import { Footer } from "@/components/layouts/footer";
 interface DashboardProps {
   children?: React.ReactNode;
 }
@@ -60,6 +61,7 @@ export default function Dashboard({ children }: DashboardProps) {
             />
           )}
         </div>
+        <Footer />
       </div>
     </div>
   );

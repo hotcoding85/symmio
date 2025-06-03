@@ -59,7 +59,7 @@ export const translations: Translations = {
       marketsCreated: "Markets created",
       fundmakerVaults: "FundMaker Indexes",
       averageAPYImprovement: "Average APY Improvement",
-      indexInfo: "Index Info",
+      vaultInfo: "Index Info",
       indexOverview: "Index Overview",
       indexPerformance: "Index Performance",
       connect: "Let's Connect",

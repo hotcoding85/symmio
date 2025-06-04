@@ -4,11 +4,18 @@ import { useLanguage } from "@/contexts/language-context";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Home } from "lucide-react";
-
-export function Footer() {
+interface FooterProps {
+  className: string;
+}
+export function Footer({ className }: FooterProps) {
   const { t } = useLanguage();
   return (
-    <footer className="fixed flex w-full flex-row gap-4 bottom-0 h-[40px] md:h-[40px] pt-0 shrink-0 items-center border-b border-transparent bg-foreground px-[11px] lg:px-[20px]">
+    <footer
+      className={cn(
+        "flex w-full flex-row gap-4 justify-end bottom-0 h-[40px] md:h-[40px] pt-0 shrink-0 items-center bg-background px-[11px] lg:px-[40px] border-b border-gray-400",
+        className
+      )}
+    >
       <Link
         className={cn(
           "flex items-center gap-3 rounded-sm py-[6px] font-[500] transition-colors ",
@@ -19,7 +26,7 @@ export function Footer() {
           //   ? "bg-foreground hover:bg-accent text-primary"
           //   : " hover:bg-accent hover:text-muted"
         )}
-        href={"/connect"}
+        href={"/"}
       >
         <Home className="text-primary hover:underline text-[12px] w-4 h-4" />
       </Link>
@@ -58,7 +65,7 @@ export function Footer() {
         className={cn(
           "flex items-center gap-3 rounded-sm py-[6px] font-[500] transition-colors ",
           "justify-center px-0",
-          "bg-foreground hover:underline text-primary text-[12px]"
+          "bg-transparent hover:underline text-primary text-[12px]"
           // className,
           // active
           //   ? "bg-foreground hover:bg-accent text-primary"

@@ -157,10 +157,12 @@ export const translations: Translations = {
     },
     type: {
       all: "All Transaction Types",
-      deposit: "Index Deposit",
-      withdraw: "Index Withdraw",
-      free: "Index Free",
-      transfer: "Index Transfer",
+      mint: "Index Mint",
+      collateral_deposit: "Collateral Deposit",
+      index_deposit: "Index Deposit",
+      burn: "Index Burn",
+      bridge: "Index Bridge",
+      redeem: 'Collateral Redeem'
     },
     ecosystem: {
       aragon:

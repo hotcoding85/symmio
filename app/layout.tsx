@@ -44,8 +44,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#15181a]`}
       >
-        {/*  <PHProvider>
-         <PostHogPageview /> */}
+         <PHProvider>
+         <PostHogPageview />
           <ReduxProvider>
             <ThemeProvider
               attribute="class"
@@ -59,7 +59,7 @@ export default function RootLayout({
               </LanguageProvider>
             </ThemeProvider>
           </ReduxProvider>
-         {/* </PHProvider> */}
+         </PHProvider>
       </body>
     </html>
   );

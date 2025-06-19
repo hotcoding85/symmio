@@ -6,8 +6,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { ReduxProvider } from "@/provider/reduxProvider";
 // import { initPostHog } from "../lib/posthog";
-import { PHProvider, PostHogPageview } from '../lib/posthog'
+import { PHProvider, PostHogPageview } from "../lib/posthog";
 import SessionTracker from "../components/posthog/sessionTracker";
+import { WalletProvider } from "@/contexts/wallet-context";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -44,7 +45,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#15181a]`}
       >
-         <PHProvider>
+        <WalletProvider>
+           <PHProvider>
          <PostHogPageview />
           <ReduxProvider>
             <ThemeProvider
@@ -59,7 +61,8 @@ export default function RootLayout({
               </LanguageProvider>
             </ThemeProvider>
           </ReduxProvider>
-         </PHProvider>
+          </PHProvider>
+        </WalletProvider>
       </body>
     </html>
   );

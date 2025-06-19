@@ -22,6 +22,8 @@ type Translations = {
 export const translations: Translations = {
   en: {
     common: {
+      dashboard: "Dashboard",
+      connecting: "Connecting",
       index: "Our Indexes",
       curators: "Curators",
       analytics: "Analytics",
@@ -161,7 +163,9 @@ export const translations: Translations = {
       assetClass: "Asset Class",
       category: "Category",
       inceptionDate: "Inception Date",
-      performance: "Average Annual Returns"
+      performance: "Average Annual Returns",
+      id: 'ID',
+      rebalance_timestamp: "Rebalance Date",
     },
     type: {
       all: "All Transaction Types",

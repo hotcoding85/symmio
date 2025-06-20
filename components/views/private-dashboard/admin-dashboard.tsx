@@ -352,8 +352,8 @@ export function AdminDashboard({ onSupplyClick }: AdminDashboardProps) {
                   <span className="text-sm text-muted-foreground">
                     {currentRebalance
                       ? new Date(
-                          currentRebalance.createdAt
-                        ).toLocaleDateString()
+                          currentRebalance.timestamp * 1000
+                        ).toDateString()
                       : ""}
                   </span>
                 </CardHeader>

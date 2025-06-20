@@ -229,7 +229,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                 {t("common.support")}
               </NavItem>
               <NavItem
-                href="https://cdn.morpho.org/documents/FundMaker_Terms_of_Use.pdf"
+                href="https://psymm.gitbook.io/indexmaker/index-maker-hld/compliance/terms-of-use"
                 icon={TOS}
                 external
                 className="text-muted h-[28px] px-[6px] py-[2px]"

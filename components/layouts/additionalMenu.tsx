@@ -1,109 +1,325 @@
 "use client";
 
-import { useLanguage } from "@/contexts/language-context";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Home } from "lucide-react";
-import { useState } from "react";
-import { CalendlyModal } from "../calendly/calendly-modal";
-import { SubscribeModal } from "../subscribe/subscribe-modal";
-import { useDispatch } from "react-redux";
-import { addSelectedVault } from "@/redux/vaultSlice";
+import { Button } from "@/components/ui/button";
+import { NetworkSwitcher, networks } from "../elements/network-switcher";
 import { CustomButton } from "../ui/custom-button";
+import Navigation from "../icons/navigation";
+import { LanguageSelector } from "../elements/language-selector";
+import { useLanguage } from "@/contexts/language-context";
+import { cn, shortenAddress } from "@/lib/utils";
+import NavigationAlert from "../icons/navigation-alert";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@radix-ui/react-popover";
+import RightArrow from "../icons/right-arrow";
+import Switch from "../icons/switch";
+import Disconnect from "../icons/disconnect";
+import { useCallback, useEffect, useState } from "react";
+import { NetworkMismatchModal } from "../elements/network-mismatch-modal";
+import Image from "next/image";
+import Base from "../../public/icons/base.png";
+import Info from "../icons/info";
+import { useWallet } from "../../contexts/wallet-context";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentChainId, setSelectedNetwork } from "@/redux/networkSlice";
+import { RootState } from "@/redux/store";
 
-interface AdditionalMenuProps {
-  className: string;
-  canBuy?: boolean;
-  indexName?: string;
-  ticker?: string;
+interface HeaderProps {
+  sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
+  rightbarOpen: boolean;
+  setRightbarOpen: (open: boolean) => void;
+  isVisible: boolean;
 }
 
-export function AdditionalMenu({
-  className,
-  canBuy = false,
-  indexName,
-  ticker
-}: AdditionalMenuProps) {
-  const { t } = useLanguage();
-  const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
-  const [isSubscribeOpen, setIsSubscribeOpen] = useState(false);
-  const dispatch = useDispatch();
+export function Header({
+  sidebarOpen,
+  setSidebarOpen,
+  rightbarOpen,
+  setRightbarOpen,
+  isVisible,
+}: HeaderProps) {
+  const {
+    wallet,
+    isConnected,
+    connecting,
+    connectWallet,
+    disconnectWallet,
+    switchNetwork,
+    switchWallet,
+  } = useWallet();
 
-  // Function to handle supply button click
-  const handleSupplyClick = (name: string, ticker: string) => {
-    dispatch(addSelectedVault({ name, ticker }));
+  const { t } = useLanguage();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentNetwork = searchParams.get("network");
+  const router = useRouter();
+  const dispatch = useDispatch()
+  // const [selectedNetwork, setSelectedNetwork] = useState<string>("0x1");
+  const { selectedNetwork, currentChainId } = useSelector(
+    (state: RootState) => state.network
+  );
+  const [showModal, setShowModal] = useState(false);
+
+  const selectedVault = ""; // Replace with your vault selection logic
+
+  const defaultNetwork =
+    networks.find((n) => n.id === searchParams.get("network")) || networks[0];
+
+  // Initialize network if not set
+  useEffect(() => {
+    if (!selectedNetwork) {
+      dispatch(setSelectedNetwork(defaultNetwork.chainId));
+    }
+  }, [defaultNetwork, selectedNetwork]);
+
+  useEffect(() => {
+    // Update the URL without reloading the page
+    const url = new URL(window.location.href);
+    if (selectedNetwork) {
+      const network = networks.find((n) => n.chainId === selectedNetwork);
+      if (network) {
+        url.searchParams.set("network", network.id);
+        router.replace(url.toString(), { scroll: false });
+      }
+    }
+  }, [selectedNetwork, router]);
+
+  // Generate breadcrumb items
+  const pathSegments = pathname.split("/").filter((segment) => segment);
+  const shouldShowBreadcrumb = pathSegments.length > 1;
+
+  const breadcrumbItems = pathSegments.map((segment, index) => {
+    if (segment === "vault") {
+      segment = "indexes";
+    }
+    const path =
+      segment === "indexes"
+        ? "/"
+        : `../${pathSegments.slice(0, index + 1).join("/")}`;
+    const _segment = t("common." + segment);
+    return {
+      name: segment.charAt(0).toUpperCase() + segment.slice(1),
+      href: path,
+    };
+  });
+
+  const [isIndexDetailPage] = useState<boolean>(
+    pathSegments.length > 1 && pathSegments.includes("vault")
+  );
+
+  // Listen for wallet chain changes
+  useEffect(() => {
+    if (wallet && wallet.chains.length > 0) {
+      const chainId = wallet.chains[0].id;
+      dispatch(setCurrentChainId(chainId));
+
+      if (chainId !== selectedNetwork && chainId !== "0x2105") {
+        setShowModal(true);
+      } else {
+        setShowModal(false);
+      }
+    } else {
+      dispatch(setCurrentChainId(null));
+      setShowModal(false);
+    }
+  }, [selectedNetwork, wallet, dispatch]);
+
+  const handleNetworkSwitch = useCallback(
+    async (chainId: string) => {
+      if (!isConnected) return;
+
+      dispatch(setSelectedNetwork(chainId));
+
+      if (currentChainId !== chainId) {
+        setShowModal(true);
+      } else {
+        setShowModal(false);
+      }
+    },
+    [isConnected, currentChainId, dispatch]
+  );
+
+  const handleSwitchWalletNetwork = async () => {
+    await switchNetwork(selectedNetwork);
+    setShowModal(false);
   };
+
   return (
     <>
-      <footer
-        className={cn(
-          "flex w-full flex-row gap-4 justify-end bottom-0 h-[40px] md:h-[40px] pt-0 shrink-0 items-center bg-transparent px-[4px]",
-          className
-        )}
-      >
-        {/* <Link
-          className={cn(
-            "flex items-center gap-3 rounded-sm py-[6px] font-[500] transition-colors ",
-            "justify-center ",
-            " hover:underline text-primary text-[16px] cursor-pointer"
-          )}
-          href={"/"}
-        >
-          <Home className="text-primary hover:underline text-[16px] w-5 h-5" />
-        </Link> */}
-        <CustomButton
-          className={cn(
-            "flex items-center gap-3 rounded-sm py-[6px] font-[500] transition-colors px-2",
-            "justify-center ",
-            " hover:underline text-primary text-[16px] cursor-pointer"
-          )}
-          onClick={() => setIsCalendlyOpen(true)}
-        >
-          {t("common.connect")}
-        </CustomButton>
-        <CustomButton
-          className={cn(
-            "flex items-center gap-3 rounded-sm py-[6px] font-[500] transition-colors px-2",
-            "justify-center ",
-            " hover:underline text-primary text-[16px] cursor-pointer"
-          )}
-          onClick={() => setIsSubscribeOpen(true)}
-        >
-          {t("common.subscribe")}
-        </CustomButton>
-        <>
-          <CustomButton
-            className={cn(
-              "flex items-center gap-3 rounded-sm py-[6px] font-[500] transition-colors px-2",
-              "justify-center ",
-              canBuy
-                ? " hover:underline text-primary text-[16px] cursor-pointer"
-                : " text-gray-400 text-[16px] cursor-not-allowed"
-            )}
-            onClick={
-              canBuy
-                ? () =>
-                    indexName && ticker ? handleSupplyClick(indexName, ticker) : {}
-                : undefined
-            }
-            disabled={!canBuy}
+      <div className="flex flex-col gap-0">
+        <header className="flex h-[55px] md:h-[50px] pt-0 shrink-0 items-center border-b border-transparent bg-background px-[11px] lg:px-[40px]">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
           >
-            {t("common.buy")}
-          </CustomButton>
-        </>
-      </footer>
+            <Navigation className="h-6 w-6 text-primary" />
+            <span className="sr-only">Toggle menu</span>
+          </Button>
 
-      <CalendlyModal
-        isOpen={isCalendlyOpen}
-        onClose={() => setIsCalendlyOpen(false)}
-      />
+          {shouldShowBreadcrumb && (
+            <nav className="text-sm text-secondary hidden md:flex">
+              <ol className="flex items-center space-x-2">
+                {breadcrumbItems.map((item, index) => (
+                  <li key={item.href} className="flex items-center">
+                    {index === breadcrumbItems.length - 1 ? (
+                      <span className="text-muted text-semibold text-[13px]">
+                        {item.name}
+                      </span>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className="text-muted text-semibold hover:text-primary text-[13px]"
+                      >
+                        {item.name}
+                        <span className="mx-2 text-muted text-semibold text-[13px]">
+                          {" "}
+                          /{" "}
+                        </span>
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )}
 
-      {/* Subscribe Modal */}
-      <SubscribeModal
-        isOpen={isSubscribeOpen}
-        onClose={() => setIsSubscribeOpen(false)}
-        IndexName={indexName || ""}
-      />
+          <div className="ml-auto flex items-center gap-2">
+            <LanguageSelector />
+            <NetworkSwitcher
+              handleNetworkSwitch={handleNetworkSwitch}
+              selectedNetwork={networks.find(
+                (n) => n.chainId === selectedNetwork
+              ) || null}
+              setSelectedNetwork={(newNetwork) =>
+                setSelectedNetwork(newNetwork.chainId)
+              }
+            />
+
+            {isConnected && wallet ? (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <CustomButton className="flex items-center gap-1 bg-transparent lg:bg-foreground text-[11px] rounded-[3px] cursor-pointer hover:bg-accent">
+                    <div className="w-[17px] h-[17px] rounded-full bg-gradient-to-br from-[#A5FECA] via-[#3EDCEB] via-[#2594FF] to-[#53F]"></div>
+                    <span className="text-secondary hidden lg:flex">
+                      {shortenAddress(wallet.accounts[0].address)}
+                    </span>
+                    {currentChainId !== selectedNetwork &&
+                      currentChainId !== "0x2105" && (
+                        <Info color="#FFB13De6" className="h-4 w-4" />
+                      )}
+                  </CustomButton>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-[300px] p-0 bg-ring text-card flex flex-col shadow-[0px_1px_20px_0px_rgba(0,0,0,0.04),0px_12px_16px_0px_rgba(6,9,11,0.05),0px_6px_12px_0px_rgba(0,0,0,0.07)] z-100"
+                  align="end"
+                  sideOffset={5}
+                >
+                  <Link
+                    href={
+                      `https://etherscan.${
+                        currentNetwork === "mainnet" ? "org" : "io"
+                      }/address/` + wallet.accounts[0].address
+                    }
+                    target="_blank"
+                    className="flex gap-2 px-[8px] py-[12px] items-center h-[48px] border-b-[1px] border-accent cursor-pointer hover:bg-accent"
+                  >
+                    <div className="w-[17px] h-[17px] rounded-full bg-gradient-to-br from-[#A5FECA] via-[#3EDCEB] via-[#2594FF] to-[#53F]"></div>
+                    <span className="text-secondary text-[14px] underline">
+                      {shortenAddress(wallet.accounts[0].address)}
+                    </span>
+                    <RightArrow
+                      className="w-4 h-4 rotate-135"
+                      width="12px"
+                      height="12px"
+                    />
+                  </Link>
+                  {currentChainId !== selectedNetwork &&
+                  currentChainId !== "0x2105" ? (
+                    <div
+                      className="flex gap-2 p-[6px] items-center h-[36px] border-b-[1px] border-accent cursor-pointer hover:bg-accent"
+                      onClick={handleSwitchWalletNetwork}
+                    >
+                      {currentChainId !== "0x1" ? (
+                        <Image
+                          src={"https://cdn.morpho.org/assets/chains/eth.svg"}
+                          alt={"Ethereum"}
+                          width={17}
+                          height={17}
+                        />
+                      ) : (
+                        <Image src={Base} alt={"Base"} width={17} height={17} />
+                      )}
+                      <span className="text-secondary text-[14px]">
+                        {t("common.switchWalletNetwork")}
+                      </span>
+                      <Info color="#FFB13De6" className="h-4 w-4" />
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                  <div
+                    className="flex gap-2 p-[6px] items-center h-[36px] border-b-[1px] border-accent cursor-pointer hover:bg-accent"
+                    onClick={switchWallet}
+                  >
+                    <Switch className="w-4 h-4 text-primary" />
+                    <span className="text-secondary text-[14px]">
+                      {t("common.switchWallet")}
+                    </span>
+                  </div>
+                  <div
+                    className="flex gap-2 p-[6px] items-center h-[36px] cursor-pointer hover:bg-accent"
+                    onClick={disconnectWallet}
+                  >
+                    <Disconnect className="w-4 h-4 text-primary" />
+                    <span className="text-secondary text-[14px]">
+                      {t("common.disconnectWallet")}
+                    </span>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            ) : (
+              <CustomButton
+                onClick={connectWallet}
+                disabled={connecting}
+                className="bg-[#2470ff] hover:bg-blue-700 text-[11px] rounded-[3px] cursor-pointer"
+              >
+                {connecting
+                  ? t("common.connecting")
+                  : t("common.connectWallet")}
+              </CustomButton>
+            )}
+
+            {selectedVault.length > 0 ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="lg:hidden"
+                onClick={() => setRightbarOpen(!rightbarOpen)}
+              >
+                <NavigationAlert className="h-7 w-7 text-primary" />
+                <span className="sr-only">Toggle Right</span>
+              </Button>
+            ) : (
+              <></>
+            )}
+
+            <NetworkMismatchModal
+              isOpen={showModal}
+              onClose={() => setShowModal(false)}
+              walletChainId={currentChainId || ""}
+              desiredNetwork={selectedNetwork}
+              onSwitch={handleSwitchWalletNetwork}
+            />
+          </div>
+        </header>
+      </div>
     </>
   );
 }

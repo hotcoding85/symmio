@@ -58,14 +58,16 @@ export function Header({
   const searchParams = useSearchParams();
   const currentNetwork = searchParams.get("network");
   const router = useRouter();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   // const [selectedNetwork, setSelectedNetwork] = useState<string>("0x1");
   const { selectedNetwork, currentChainId } = useSelector(
     (state: RootState) => state.network
   );
   const [showModal, setShowModal] = useState(false);
 
-  const selectedVault = ""; // Replace with your vault selection logic
+  const selectedVault = useSelector(
+    (state: RootState) => state.vault.selectedVault
+  );
 
   const defaultNetwork =
     networks.find((n) => n.id === searchParams.get("network")) || networks[0];
@@ -194,9 +196,9 @@ export function Header({
             <LanguageSelector />
             <NetworkSwitcher
               handleNetworkSwitch={handleNetworkSwitch}
-              selectedNetwork={networks.find(
-                (n) => n.chainId === selectedNetwork
-              ) || null}
+              selectedNetwork={
+                networks.find((n) => n.chainId === selectedNetwork) || null
+              }
               setSelectedNetwork={(newNetwork) =>
                 setSelectedNetwork(newNetwork.chainId)
               }

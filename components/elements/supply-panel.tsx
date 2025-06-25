@@ -340,9 +340,7 @@ export function SupplyPanel({
                               }}
                             />
                             <div className="font-mono text-[11px] text-muted">
-                              {(balances["USDC"] &&
-                                balances["USDC"].toFixed(2)) ||
-                                0.0}
+                              {0.00}
                             </div>
                           </div>
 

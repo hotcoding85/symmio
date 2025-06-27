@@ -18,7 +18,6 @@ import {
   PopoverTrigger,
 } from "@radix-ui/react-popover";
 import { getViemClient } from "@/lib/blocknative/viem";
-import { base } from "viem/chains";
 import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
 import Info from "../icons/info";

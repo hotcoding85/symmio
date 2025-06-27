@@ -49,46 +49,56 @@ export default function PDFViewer() {
   );
 }
 
-function PDFPage({
-  pdf,
-  pageNumber,
-  width,
-}: {
-  pdf: any;
-  pageNumber: number;
-  width: number;
-}) {
+function PDFPage({ pdf, pageNumber, width }: { pdf: any; pageNumber: number; width: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mirrorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!pdf) return;
 
     const renderPage = async () => {
       const page = await pdf.getPage(pageNumber);
-      const viewport = page.getViewport({
-        scale: width / page.getViewport({ scale: 1 }).width,
-      });
+      const viewport = page.getViewport({ scale: width / page.getViewport({ scale: 1 }).width });
 
+      // Canvas rendering (original)
       const canvas = canvasRef.current;
-      if (!canvas) return;
+      if (canvas) {
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        await page.render({ canvasContext: canvas.getContext("2d")!, viewport }).promise;
+      }
 
-      canvas.width = viewport.width;
-      canvas.height = viewport.height;
-
-      await page.render({
-        canvasContext: canvas.getContext("2d")!,
-        viewport,
-      }).promise;
+      // Mirror rendering for PostHog
+      const mirror = mirrorRef.current;
+      if (mirror) {
+        mirror.style.width = `${viewport.width}px`;
+        mirror.style.height = `${viewport.height}px`;
+        mirror.innerHTML = `
+          <div style="padding:10px;background:#f0f0f0;color:#333">
+            PDF Page ${pageNumber} (${Math.round(viewport.width)}×${Math.round(viewport.height)}px)
+          </div>
+        `;
+      }
     };
 
     renderPage();
   }, [pdf, pageNumber, width]);
 
   return (
-    <div
-      style={{ marginBottom: "20px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}
-    >
+    <div style={{ position: 'relative', marginBottom: '20px' }}>
       <canvas ref={canvasRef} />
+      <div 
+        ref={mirrorRef}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          visibility: 'hidden',
+          pointerEvents: 'none',
+          zIndex: -1
+        }}
+        aria-hidden="true"
+      />
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import { useSearchParams } from "next/navigation";
 import Dashboard from "@/components/views/Dashboard/dashboard";
+import { HybridPDFViewer } from "@/components/pdfviewer/PDFFullViewer";
 
 // Set PDF.js worker path
 pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdf.js/pdf.worker.mjs";
@@ -26,7 +27,7 @@ export default function PDFViewer() {
 
   return (
     <Dashboard _sidebarOpen={true}>
-      <div
+      {/* <div
         ref={containerRef}
         style={{
           width: "100%",
@@ -44,7 +45,8 @@ export default function PDFViewer() {
             width={containerRef.current?.clientWidth || 800}
           />
         ))}
-      </div>
+      </div> */}
+      <HybridPDFViewer className="bg-foreground text-primary" pdfUrl={'/brand-book.pdf'} />
     </Dashboard>
   );
 }

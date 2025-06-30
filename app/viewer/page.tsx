@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import * as pdfjsLib from "pdfjs-dist";
 import { useSearchParams } from "next/navigation";
 import Dashboard from "@/components/views/Dashboard/dashboard";
-import { HybridPDFViewer } from "@/components/pdfviewer/PDFFullViewer";
+import { RichPDFViewer } from "@/components/pdfviewer/PDFFullViewer";
 
 // Set PDF.js worker path
 pdfjsLib.GlobalWorkerOptions.workerSrc = "./pdf.js/pdf.worker.mjs";
@@ -46,7 +46,7 @@ export default function PDFViewer() {
           />
         ))}
       </div> */}
-      <HybridPDFViewer className="bg-foreground text-primary" pdfUrl={'/brand-book.pdf'} />
+      <RichPDFViewer className="bg-foreground text-primary" pdfUrl={'/brand-book.pdf'} />
     </Dashboard>
   );
 }

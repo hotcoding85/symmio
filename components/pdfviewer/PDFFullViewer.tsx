@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChevronLeft, ChevronRight, FileText, Loader2, ImageIcon, ZoomOut, ZoomIn, PanelLeft, PanelLeftClose } from "lucide-react"
 import { GetViewportParameters, RenderParameters } from "pdfjs-dist/types/src/display/api"
 import { PageViewport, RenderTask } from "pdfjs-dist"
+import { useMediaQuery } from "react-responsive"
 
 // PDF.js types
 interface TextItem {
@@ -81,6 +82,8 @@ export function RichPDFViewer({ pdfUrl, className = "" }: RichPDFViewerProps) {
   const [thumbnails, setThumbnails] = useState<{page: number, url: string}[]>([])
   const [showThumbnails, setShowThumbnails] = useState(true)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  const isSmallWindow = useMediaQuery({ maxWidth: 1024 })
 
   // Load PDF.js dynamically
   useEffect(() => {
@@ -283,7 +286,7 @@ export function RichPDFViewer({ pdfUrl, className = "" }: RichPDFViewerProps) {
           <div className="text-center">
             <FileText className="w-12 h-12 text-red-500 mx-auto mb-4" />
             <p className="text-red-600 font-medium">Error loading PDF</p>
-            <p className="text-gray-600 text-sm mt-2">{error}</p>
+            <p className="text-secondary text-[11px] mt-2">{error}</p>
           </div>
         </CardContent>
       </Card>
@@ -291,14 +294,17 @@ export function RichPDFViewer({ pdfUrl, className = "" }: RichPDFViewerProps) {
   }
 
   return (
-    <Card className={`w-full max-w-6xl mx-auto ${className}`}>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <CardTitle className="flex items-center gap-2">
+    <Card className={`w-full mx-auto ${className} bg-transparent border-0`}>
+      <CardHeader className={`
+          flex items-center justify-between pb-4
+          ${isSmallWindow ? "flex-wrap" : ""}
+        `}>
+        <CardTitle className={`flex items-center gap-2`}>
           <FileText className="w-5 h-5" />
-          Hybrid PDF Viewer
+          <span>IndexMaker Terms of Service</span>
         </CardTitle>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           {/* Thumbnail Toggle */}
           <Button variant="outline" size="sm" onClick={toggleThumbnails}>
             {showThumbnails ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
@@ -336,47 +342,78 @@ export function RichPDFViewer({ pdfUrl, className = "" }: RichPDFViewerProps) {
         </div>
       </CardHeader>
 
-      <CardContent className="p-0">
-        <div className="flex flex-row h-[calc(100vh-200px)] min-h-[500px] overflow-hidden">
-          {/* Thumbnail Sidebar */}
+      <CardContent
+        className={`
+          p-0
+        `}
+      >
+        <div className={`flex bg-foreground overflow-hidden ${isSmallWindow ? 'h-[calc(100vh-350px)] flex-col' : 'h-[calc(100vh-300px)] flex-row'}`}>
+          {/* ← MOBILE: Thumbnails on top; DESKTOP: Sidebar */}
           {showThumbnails && (
-            <div className="w-48 border-r overflow-y-auto bg-gray-50">
-              <div className="p-2 space-y-2">
+            isSmallWindow ? (
+              <div className="flex overflow-x-auto space-x-2 p-2 bg-foreground border-b">
                 {thumbnails.map((thumb) => (
                   <div
-                    key={`thumb-${thumb.page}`}
-                    className={`relative cursor-pointer border rounded overflow-hidden ${currentPage === thumb.page ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-200'}`}
-                    onClick={() => goToPage(thumb.page)}
+                    key={thumb.page}
+                    className={`flex-shrink-0 cursor-pointer border rounded ${
+                      currentPage === thumb.page
+                        ? "border-blue-500 ring-2 ring-blue-300"
+                        : "border-gray-200"
+                    }`}
+                    onClick={() => setCurrentPage(thumb.page)}
+                  >
+                    <img
+                      src={thumb.url}
+                      alt={`Page ${thumb.page}`}
+                      className="h-20 w-auto"
+                    />
+                    <div className="absolute bottom-1 right-1 bg-foreground bg-opacity-50 text-primary text-xs px-1 rounded">
+                      {thumb.page}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="w-48 border-r overflow-y-auto bg-foreground p-2">
+                {thumbnails.map((thumb) => (
+                  <div
+                    key={thumb.page}
+                    className={`relative cursor-pointer border rounded overflow-hidden mb-2 ${
+                      currentPage === thumb.page
+                        ? "border-blue-500 ring-2 ring-blue-300"
+                        : "border-gray-200"
+                    }`}
+                    onClick={() => setCurrentPage(thumb.page)}
                   >
                     <img
                       src={thumb.url}
                       alt={`Page ${thumb.page}`}
                       className="w-full h-auto"
                     />
-                    <div className="absolute bottom-1 right-1 bg-black bg-opacity-50 text-white text-xs px-1 rounded">
+                    <div className="absolute bottom-1 right-1 bg-foreground bg-opacity-50 text-primary text-xs px-1 rounded">
                       {thumb.page}
                     </div>
                   </div>
                 ))}
                 {thumbnails.length < totalPages && (
-                  <div className="text-center text-gray-500 text-sm py-4">
+                  <div className="text-center text-secondary text-sm py-4">
                     Loading more thumbnails...
                   </div>
                 )}
               </div>
-            </div>
+            )
           )}
 
           {/* Main PDF Viewer */}
-          <div className="flex-1 overflow-auto bg-gray-100">
+          <div className="flex-1 overflow-auto bg-foreground">
             {loading ? (
               <div className="flex items-center justify-center h-full">
                 <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                 <span className="ml-2 text-gray-600">Rendering PDF page...</span>
               </div>
             ) : (
-              <div className="bg-foreground p-0 rounded-lg overflow-auto">
-                <div className="relative mx-auto bg-white shadow-lg" style={{ width: pageWidth, height: pageHeight }}>
+              <div className="bg-foreground p-0 rounded-lg overflow-auto flex h-full">
+                <div className="relative mx-auto bg-foreground shadow-lg m-auto" style={{ width: pageWidth, height: pageHeight }}>
                   {/* Background PDF Image */}
                   {pageImage && (
                     <img
@@ -387,26 +424,6 @@ export function RichPDFViewer({ pdfUrl, className = "" }: RichPDFViewerProps) {
                     />
                   )}
 
-                  {/* Selectable Text Overlays */}
-                  {/* {textOverlays.map((overlay, index) => (
-                    <div
-                      key={`overlay-${index}`}
-                      className="absolute text-transparent select-text cursor-text hover:bg-blue-100 hover:bg-opacity-30"
-                      style={{
-                        left: `${overlay.x}px`,
-                        top: `${overlay.y - overlay.fontSize}px`,
-                        width: `${overlay.width}px`,
-                        height: `${overlay.fontSize}px`,
-                        fontSize: `${overlay.fontSize}px`,
-                        lineHeight: "1",
-                        overflow: "hidden",
-                      }}
-                      title={overlay.content} // Show text on hover
-                    >
-                      {overlay.content}
-                    </div>
-                  ))} */}
-
                   {/* Hidden canvas for rendering */}
                   <canvas ref={canvasRef} style={{ display: "none" }} />
                 </div>
@@ -416,7 +433,7 @@ export function RichPDFViewer({ pdfUrl, className = "" }: RichPDFViewerProps) {
         </div>
 
         {/* Content Info */}
-        <div className="flex items-center justify-between text-sm text-gray-600 mt-4 pt-4 border-t px-4">
+        {/* <div className="flex items-center justify-between text-sm text-gray-600 mt-4 pt-4 border-t px-4">
           <span>
             Page {currentPage} rendered with {textOverlays.length} text elements
           </span>
@@ -426,7 +443,7 @@ export function RichPDFViewer({ pdfUrl, className = "" }: RichPDFViewerProps) {
               Size: {pageWidth} × {pageHeight}px
             </span>
           </div>
-        </div>
+        </div> */}
       </CardContent>
     </Card>
   )

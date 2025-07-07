@@ -40,7 +40,7 @@ interface SupplyPanelProps {
 interface VaultInfo {
   name: string;
   ticker: string;
-  amount: number;
+  amount: string;
 }
 
 interface TransactionData {
@@ -99,9 +99,9 @@ export function SupplyPanel({
       return {
         token: vault.name,
         amount:
-          vaultIds.find((vaultId) => vaultId.name === vault.name)?.amount || 0,
+          Number(vaultIds.find((vaultId) => vaultId.name === vault.name)?.amount) || 0,
         value:
-          vaultIds.find((vaultId) => vaultId.name === vault.name)?.amount || 0,
+          Number(vaultIds.find((vaultId) => vaultId.name === vault.name)?.amount) || 0,
         apy: vault.performance?.oneYearReturn || 0,
         collateral: vault.collateral,
       };

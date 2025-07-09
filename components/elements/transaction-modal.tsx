@@ -13,6 +13,7 @@ import Image from "next/image";
 import IndexMaker from "../icons/indexmaker";
 import USDC from "../../public/logos/usd-coin.png";
 import CustomTooltip from "./custom-tooltip";
+import { toast } from "sonner";
 
 interface TransactionItem {
   token: string;
@@ -26,7 +27,7 @@ interface TransactionItem {
 }
 
 const USDC_ADDRESS = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
-const OTC_INDEX_ADDRESS = "0x01055d9E2b6A4d5E07cC4585B40567da41238f04";
+const OTC_INDEX_ADDRESS = "0xF3eA34CfAD1ce45Ea39AaEb636a701E892510a10";
 const USDC_DECIMALS = 6;
 
 interface TransactionConfirmModalProps {
@@ -58,7 +59,7 @@ export function TransactionConfirmModal({
   const [txHash, setTxHash] = useState<string | null>(null);
   const [finalizing, setFinalizing] = useState(false);
 
-  const { wallet, isConnected, connectWallet } = useWallet();
+  const { wallet, address, connectWallet } = useWallet();
 
   const handleConfirm = async () => {
     if (!wallet) {
@@ -127,18 +128,23 @@ export function TransactionConfirmModal({
           .toString() || "0",
         USDC_DECIMALS
       );
-
+      const seqNum = Math.floor(Math.random() * 100000)
       const tx = await otcIndex.deposit(
         amount,
-        Math.floor(Math.random() * 100000),
-        ethers.ZeroAddress,
+        seqNum,
+        process.env.NEXT_PUBLIC_ADMIN_ADDRESS,
         ethers.ZeroAddress
       );
 
       await tx.wait();
       setTxHash(tx.hash);
       setFinalizing(true);
+
+      // const _tx = await otcIndex.mint(wallet?.accounts[0]?.address || '0', amount, seqNum);
+
+      // await _tx.wait();
       setDepositStatus("done");
+      toast.success("Deposit success...")
       // handleClose();
     } catch (e) {
       console.error("Deposit error:", e);

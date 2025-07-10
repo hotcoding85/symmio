@@ -140,7 +140,7 @@ export function TransactionConfirmModal({
       setTxHash(tx.hash);
       setFinalizing(true);
 
-      // const _tx = await otcIndex.mint(wallet?.accounts[0]?.address || '0', amount, seqNum);
+      // const _tx = await otcIndex.mint(OTC_INDEX_ADDRESS, amount, seqNum);
 
       // await _tx.wait();
       setDepositStatus("done");

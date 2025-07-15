@@ -602,8 +602,8 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                   </AccordionTrigger>
                   <AccordionContent className="pt-4">
                     {historicalLoading ? (
-                      <div className="space-y-3 animate-pulse">
-                        <div className="h-10 bg-muted rounded w-full mx-auto"></div>
+                      <div className="space-y-3 animate-pulse py-2">
+                        <div className="h-10 bg-foreground rounded w-full mx-auto"></div>
                       </div>
                     ) : (
                       <VaultReAllocation
@@ -621,8 +621,8 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                   </AccordionTrigger>
                   <AccordionContent className="pt-4">
                     {depositTransactionLoading ? (
-                      <div className="space-y-3 animate-pulse">
-                        <div className="h-10 bg-muted rounded w-full mx-auto"></div>
+                      <div className="space-y-3 animate-pulse py-2">
+                        <div className="h-10 bg-foreground rounded w-full mx-auto"></div>
                       </div>
                     ) : (
                       <VaultSupply supplyPositions={supplyPositions} />
@@ -637,8 +637,8 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                   </AccordionTrigger>
                   <AccordionContent className="pt-4">
                     {userActivityLoading ? (
-                      <div className="space-y-3 animate-pulse">
-                        <div className="h-10 bg-muted rounded w-full mx-auto"></div>
+                      <div className="space-y-3 animate-pulse py-2">
+                        <div className="h-10 bg-foreground rounded w-full mx-auto"></div>
                       </div>
                     ) : (
                       <VaultActivity
@@ -1118,8 +1118,8 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                     </Popover>
                   </h1>
                   {historicalLoading ? (
-                    <div className="space-y-3 animate-pulse">
-                      <div className="h-10 bg-muted rounded w-full mx-auto"></div>
+                    <div className="space-y-3 animate-pulse py-2">
+                      <div className="h-10 bg-foreground rounded w-full mx-auto"></div>
                     </div>
                   ) : (
                     <VaultReAllocation
@@ -1136,8 +1136,8 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                     </div>
                   </h1>
                   {depositTransactionLoading ? (
-                    <div className="space-y-3 animate-pulse">
-                      <div className="h-10 bg-muted rounded w-full mx-auto"></div>
+                    <div className="space-y-3 animate-pulse py-2">
+                      <div className="h-10 bg-foreground rounded w-full mx-auto"></div>
                     </div>
                   ) : (
                     <VaultSupply supplyPositions={supplyPositions} />
@@ -1214,8 +1214,8 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                     </div>
                   </h1>
                   {userActivityLoading ? (
-                    <div className="space-y-3 animate-pulse">
-                      <div className="h-10 bg-muted rounded w-full mx-auto"></div>
+                    <div className="space-y-3 animate-pulse py-2">
+                      <div className="h-10 bg-foreground rounded w-full mx-auto"></div>
                     </div>
                   ) : (
                     <VaultActivity

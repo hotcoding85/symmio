@@ -706,9 +706,10 @@ export const reallocations: ReAllocation[] = [
 
 export type SupplyPosition = {
   id: string;
+  indexName?: string;
   user: string;
   supply: string;
-  supplySummary: string;
+  supplyValueUSD: string;
   currency: string;
   share: number;
 };
@@ -718,7 +719,7 @@ export const supplyPositions: SupplyPosition[] = [
     id: "1",
     user: "0x298b...dFb5",
     supply: "525,078,765.05",
-    supplySummary: "$524.98M",
+    supplyValueUSD: "$524.98M",
     currency: "DAI",
     share: 100,
   },

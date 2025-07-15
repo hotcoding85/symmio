@@ -18,13 +18,23 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useWallet } from "../../../contexts/wallet-context";
 import { IndexListEntry } from "@/types";
-import { setIndices } from "@/redux/indexSlice";
-import { fetchAllIndices } from "@/api/indices";
+import {
+  setIndices,
+  setTotalManaged,
+  setTotalVolume,
+} from "@/redux/indexSlice";
+import {
+  fetchAllIndices,
+  fetchDepositTransactionData,
+  getIndexMakerInfo,
+} from "@/api/indices";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { VaultSupply } from "@/components/elements/vault-supplyposition";
+import { SupplyPosition } from "@/lib/data";
 
 type ColumnType = {
   id: string;
@@ -53,18 +63,19 @@ interface EarnContentProps {
   setShowHowEarnWorks: (showHowEarnWorks: boolean) => void;
 }
 
-export function EarnContent({ onSupplyClick, showHowEarnWorks, setShowHowEarnWorks }: EarnContentProps) {
-  const {
-    wallet,
-  } = useWallet();
+export function EarnContent({
+  onSupplyClick,
+  showHowEarnWorks,
+  setShowHowEarnWorks,
+}: EarnContentProps) {
+  const { wallet } = useWallet();
   const { t } = useLanguage();
   const [columns, setColumns] = useState(initialColumns);
+  const [supplyPositions, setSupplyPositions] = useState<SupplyPosition[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortColumn, setSortColumn] = useState<string>("");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-  
-  const [totalManaged, setTotalManaged] = useState<number>(0);
-  const [totalVolumn, setTotalVolumn] = useState<number>(0);
+
   const [activeMyearnTab, setActiveMyearnTab] = useState<
     "position" | "historic"
   >("position");
@@ -74,7 +85,10 @@ export function EarnContent({ onSupplyClick, showHowEarnWorks, setShowHowEarnWor
   );
 
   const dispatch = useDispatch();
-
+  const totalManaged = useSelector((state: RootState) => state.index.totalManaged);
+  const totalVolume = useSelector((state: RootState) => state.index.totalVolume);
+  const [depositTransactionLoading, setDepositTransactionLoading] =
+    useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [indexLists, setIndexLists] = useState<IndexListEntry[]>([]);
   const [selectedIndexId, setSelectedIndexId] = useState<number | null>(null);
@@ -97,12 +111,41 @@ export function EarnContent({ onSupplyClick, showHowEarnWorks, setShowHowEarnWor
     };
 
     if (storedIndexes.length === 0) fetchData();
+
+    const fetchInfo = async () => {
+      const response = await getIndexMakerInfo();
+      if (response) {
+        dispatch(setTotalManaged(response.totalManaged));
+        dispatch(setTotalVolume(response.totalVolume));
+      }
+    };
+
+    !totalManaged && fetchInfo();
   }, []);
 
   useEffect(() => {
     const termsAccepted = localStorage.getItem("termsAccepted");
     if ((!termsAccepted || termsAccepted === "false") && wallet) {
       setShowHowEarnWorks(true);
+    }
+
+    if (wallet?.accounts) {
+      const _fetchDepositTransaction = async (_indexId: number) => {
+        setDepositTransactionLoading(true);
+        try {
+          const response = await fetchDepositTransactionData(
+            -1,
+            wallet?.accounts[0]?.address
+          );
+          const data = response;
+          setSupplyPositions(data);
+        } catch (error) {
+          console.error("Error deposit transaction data:", error);
+        } finally {
+          setDepositTransactionLoading(false);
+        }
+      };
+      _fetchDepositTransaction(-1);
     }
   }, [wallet]);
   // Function to handle sorting
@@ -238,7 +281,7 @@ export function EarnContent({ onSupplyClick, showHowEarnWorks, setShowHowEarnWor
                 </CardHeader>
                 <CardContent className="p-0 h-[20px]">
                   <div className="font-normal text-secondary text-[15px] pb-2">
-                    ${totalManaged}
+                    ${totalManaged ? totalManaged : 0}
                   </div>
                 </CardContent>
               </Card>
@@ -258,7 +301,7 @@ export function EarnContent({ onSupplyClick, showHowEarnWorks, setShowHowEarnWor
                 </CardHeader>
                 <CardContent className="p-0 h-[20px]">
                   <div className="text-[15px] font-normal text-secondary mb-2">
-                    ${totalVolumn}
+                    ${totalVolume ? totalVolume : 0}
                   </div>
                 </CardContent>
               </Card>
@@ -312,7 +355,9 @@ export function EarnContent({ onSupplyClick, showHowEarnWorks, setShowHowEarnWor
                       </CustomButton>
                     </TooltipTrigger>
                     <TooltipContent className="">
-                      <span className="text-foreground text-[12px]">Coming in Beta</span>
+                      <span className="text-foreground text-[12px]">
+                        Coming in Beta
+                      </span>
                     </TooltipContent>
                   </Tooltip>
 
@@ -328,9 +373,22 @@ export function EarnContent({ onSupplyClick, showHowEarnWorks, setShowHowEarnWor
               </div>
               <div className="p-4 border-none bg-foreground mb-10">
                 <p className="text-secondary text-center text-[12px]">
-                  {activeMyearnTab === "position"
-                    ? t("common.noEarnPosition")
-                    : t("common.noClaimableRewards")}
+                  {depositTransactionLoading ? (
+                    // Skeleton loading state
+                    <div className="space-y-3 animate-pulse">
+                      <div className="h-4 bg-muted rounded w-full mx-auto"></div>
+                    </div>
+                  ) : activeMyearnTab === "position" ? (
+                    supplyPositions.length === 0 ? (
+                      t("common.noEarnPosition")
+                    ) : (
+                      <div className="mt-[-30] m-[-16]">
+                        <VaultSupply supplyPositions={supplyPositions} myPositions={true} />
+                      </div>
+                    )
+                  ) : (
+                    t("common.noClaimableRewards")
+                  )}
                 </p>
               </div>
             </>

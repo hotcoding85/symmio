@@ -28,16 +28,29 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   const isMobile = useMediaQuery({ maxWidth: 1024 });
   const images = isMobile ? mobileImages : desktopImages;
   const [startExit, setStartExit] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(0);
+  const [readyToAnimate, setReadyToAnimate] = useState(false);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setStartExit(true), 1600); // Start exit at 1.6s
-    const finish = setTimeout(() => onFinish(), 2000); // End at 2s
+    if (imagesLoaded === images.length) {
+      setReadyToAnimate(true);
+    }
+  }, [imagesLoaded, images.length]);
+
+  useEffect(() => {
+    if (!readyToAnimate) return;
+
+    const timeout = setTimeout(() => setStartExit(true), 2000);
+    const finish = setTimeout(() => onFinish(), 2500);
+
     return () => {
       clearTimeout(timeout);
       clearTimeout(finish);
     };
-  }, [onFinish]);
-
+  }, [readyToAnimate, onFinish]);
+  const handleImageLoad = () => {
+    setImagesLoaded((prev) => prev + 1);
+  };
   const imageVariants: any = (i: number) => ({
     hidden: {
       opacity: 0,
@@ -78,90 +91,47 @@ export default function SplashScreen({ onFinish }: { onFinish: () => void }) {
   };
 
   return (
-    <div className="w-screen h-screen bg-background flex flex-col items-center justify-center overflow-hidden">
-      {isMobile ? (
-        <div className="relative w-screen h-screen bg-background overflow-hidden">
-          {/* Top row: full width, natural height */}
-          <div className="absolute top-0 w-screen grid grid-cols-2">
-            {images.slice(0, 2).map((src, i) => (
-              <motion.div
-                key={i}
-                className="relative w-full aspect-[1/1]" // or use specific ratio like 3/2
-                variants={imageVariants(i)}
-                initial="hidden"
-                animate="visible"
-              >
-                <Image
-                  src={src}
-                  alt={`img-top-${i}`}
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Bottom row: full width, natural height */}
-          <div className="absolute bottom-0 w-screen grid grid-cols-2">
-            {images.slice(2, 4).map((src, i) => (
-              <motion.div
-                key={i + 2}
-                className="relative w-full aspect-[1/1]" // or adjust as needed
-                variants={imageVariants(i + 2)}
-                initial="hidden"
-                animate="visible"
-              >
-                <Image
-                  src={src}
-                  alt={`img-bottom-${i}`}
-                  fill
-                  className="object-cover"
-                />
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Centered logo */}
-          <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10"
-            variants={logoVariants as any}
-            initial="enter"
-            animate={startExit ? "exit" : "center"}
-          >
-            <Image src={logo} alt="Logo" width={220} height={160} />
-          </motion.div>
+    <div className="w-screen h-screen bg-background flex items-center justify-center overflow-hidden">
+      <div className="flex flex-col items-center">
+        <div
+          className={`grid gap-1 ${
+            isMobile
+              ? "grid-cols-2 w-[80vw] max-w-[320px]"
+              : "grid-cols-3 w-[90vw] max-w-[720px]"
+          }`}
+          style={{
+            gridTemplateRows: isMobile ? "repeat(2, auto)" : "repeat(2, auto)",
+          }}
+        >
+          {images.map((src, i) => (
+            <motion.div
+              key={i}
+              className="relative aspect-square w-full"
+              variants={imageVariants(i)}
+              initial="hidden"
+              animate={readyToAnimate ? "visible" : "hidden"}
+            >
+              <Image
+                src={src}
+                alt={`img-${i}`}
+                fill
+                className="object-cover"
+                onLoad={handleImageLoad}
+              />
+            </motion.div>
+          ))}
         </div>
-      ) : (
-        <>
-          <div className="grid grid-cols-3 grid-rows-2 w-[80vw] max-w-[720px] aspect-[3/2]">
-            {images.map((src, i) => (
-              <motion.div
-                key={i}
-                className="relative w-full h-full"
-                variants={imageVariants(i)}
-                initial="hidden"
-                animate="visible"
-              >
-                <Image
-                  src={src}
-                  alt={`img-${i}`}
-                  fill
-                  className="object-cover rounded-md"
-                />
-              </motion.div>
-            ))}
-          </div>
 
-          <motion.div
-            className="mt-6"
-            variants={logoVariants as any}
-            initial="enter"
-            animate={"center"}
-          >
-            <Image src={logo} width={400} height={300} alt="Logo" />
-          </motion.div>
-        </>
-      )}
+        {/* Logo below the grid */}
+        <motion.div
+          className="mt-6"
+          variants={logoVariants as any}
+          initial="enter"
+          animate={"center"}
+        >
+          <Image src={logo} alt="Logo" width={300} height={160} />
+        </motion.div>
+      </div>
     </div>
   );
 }

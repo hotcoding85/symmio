@@ -1,17 +1,15 @@
-import Logo from "@/components/icons/logo";
+"use client";
+
+import { useEffect, useState } from "react";
 import Dashboard from "@/components/views/Dashboard/dashboard";
-import { Suspense } from "react";
+import SplashScreen from "@/app/loading";
 
 export default function Home() {
-  return (
-    <Suspense
-      fallback={
-        <div className="bg-background w-[100vw] h-[100vh] flex items-center justify-center">
-          <Logo className="w-80 h-50 text-muted" />
-        </div>
-      }
-    >
-      <Dashboard />
-    </Suspense>
-  );
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return loading ? <SplashScreen onFinish={() => {}} /> : <Dashboard />;
 }

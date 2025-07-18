@@ -8,7 +8,7 @@ import { ReduxProvider } from "@/provider/reduxProvider";
 // import { initPostHog } from "../lib/posthog";
 import {
   PHProvider,
-  PostHogErrorTracker,
+  // PostHogErrorTracker,
   PostHogPageview,
 } from "../lib/posthog";
 import SessionTracker from "../components/posthog/sessionTracker";
@@ -50,9 +50,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#15181a]`}
       >
         <WalletProvider>
-          <PHProvider>
-            <PostHogPageview />
-            <PostHogErrorTracker />
+          {/* <PHProvider>
+            <PostHogPageview /> */}
+            {/* <PostHogErrorTracker /> */}
             <ReduxProvider>
               <ThemeProvider
                 attribute="class"
@@ -66,7 +66,7 @@ export default function RootLayout({
                 </LanguageProvider>
               </ThemeProvider>
             </ReduxProvider>
-          </PHProvider>
+          {/* </PHProvider> */}
         </WalletProvider>
       </body>
     </html>

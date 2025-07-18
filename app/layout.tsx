@@ -50,8 +50,8 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#15181a]`}
       >
         <WalletProvider>
-          {/* <PHProvider>
-            <PostHogPageview /> */}
+          <PHProvider>
+            <PostHogPageview />
             {/* <PostHogErrorTracker /> */}
             <ReduxProvider>
               <ThemeProvider
@@ -66,7 +66,7 @@ export default function RootLayout({
                 </LanguageProvider>
               </ThemeProvider>
             </ReduxProvider>
-          {/* </PHProvider> */}
+          </PHProvider>
         </WalletProvider>
       </body>
     </html>

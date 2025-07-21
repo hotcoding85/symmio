@@ -13,6 +13,7 @@ import {
 } from "../lib/posthog";
 import SessionTracker from "../components/posthog/sessionTracker";
 import { WalletProvider } from "@/contexts/wallet-context";
+import { QuoteProvider } from "@/contexts/quote-context";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -36,8 +37,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // initPostHog();
-
   return (
     <html lang="en">
       <head>
@@ -47,7 +46,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#15181a]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-foreground`}
       >
         <WalletProvider>
           <PHProvider>
@@ -60,10 +59,12 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
-                <LanguageProvider>
-                  {children}
-                  <Toaster />
-                </LanguageProvider>
+                <QuoteProvider>
+                  <LanguageProvider>
+                    {children}
+                    <Toaster />
+                  </LanguageProvider>
+                </QuoteProvider>
               </ThemeProvider>
             </ReduxProvider>
           </PHProvider>

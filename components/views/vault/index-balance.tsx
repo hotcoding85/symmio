@@ -32,7 +32,6 @@ export default function IndexBalance({
   onSupplyClick,
 }: IndexBalanceProps) {
   const { wallet, address, connectWallet } = useWallet();
-  console.log(address, supplyPositions)
   const onClickBuyButton = useCallback(async () => {
     if (index.name !== "SY100") {
       toast.warning("Only SY100 can be deposited right now...");

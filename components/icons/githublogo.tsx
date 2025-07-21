@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function GithubLogo({ className = "", color = "#E2E0FF" }) {
-  const fillColor = className.includes("text-muted") ? "currentColor" : color;
+  const fillColor = className.includes("text-muted") ? "#ffffff" : '#ffffff';
   return (
     <svg
       width="965"

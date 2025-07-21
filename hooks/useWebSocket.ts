@@ -53,7 +53,11 @@ export default function useQuoteSocket(indexes: IndexListEntry[] = [], amount = 
 
   // ✅ Setup real-time quote polling
   useEffect(() => {
-    if (!isConnected || indexes.length === 0) return;
+    if (!isConnected) {
+      connect()
+      return;
+    }
+    if (indexes.length === 0) return;
 
     // Clear any previous interval
     if (intervalRef.current) clearInterval(intervalRef.current);

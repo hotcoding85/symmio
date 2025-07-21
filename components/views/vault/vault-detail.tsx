@@ -80,6 +80,7 @@ import {
 } from "@/components/ui/accordian";
 import { getIndexData } from "@/lib/IndexMockupData";
 import SymmioIndices from "@/components/icons/symmioIndices";
+import { useQuoteContext } from "@/contexts/quote-context";
 interface VaultDetailPageProps {
   index: IndexListEntry | null;
 }
@@ -98,15 +99,8 @@ export interface IndexData {
   formattedTransactions: any[];
 }
 export function VaultDetailPage({ index }: VaultDetailPageProps) {
-  const {
-    wallet,
-    isConnected,
-    connecting,
-    connectWallet,
-    disconnectWallet,
-    switchNetwork,
-    switchWallet,
-  } = useWallet();
+  const { wallet } = useWallet();
+  const { indexPrices } = useQuoteContext();
   const { t } = useLanguage();
   const vault = mockup_vaults[0];
   const documents = getIndexData(index?.ticker || "SY100")?.documents || [];

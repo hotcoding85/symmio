@@ -62,14 +62,6 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
   const [patchedData, setPatchedData] = useState<any[]>([]);
   const [pulsePoint, setPulsePoint] = useState(false);
 
-  useEffect(() => {
-    return () => {
-      if (chartRef.current) {
-        chartRef.current.destroy();
-      }
-    };
-  }, []);
-
   if (!data || data.length === 0) {
     if (!isLoading)
       return (

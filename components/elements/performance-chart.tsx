@@ -15,6 +15,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import "chartjs-adapter-date-fns";
+import { useQuoteContext } from "@/contexts/quote-context";
 
 ChartJS.register(
   CategoryScale,
@@ -57,7 +58,7 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
   showETHComparison = false,
 }) => {
   const chartRef = useRef<any>(null);
-
+  const { indexPrices } = useQuoteContext();
   useEffect(() => {
     return () => {
       if (chartRef.current) {

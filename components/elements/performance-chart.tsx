@@ -70,24 +70,6 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
     };
   }, []);
 
-  if (!data || data.length === 0) {
-    if (!isLoading)
-      return (
-        <div className="flex items-center justify-center h-64 bg-accent rounded-lg">
-          <p className="text-secondary">
-            No historical data available for this index
-          </p>
-        </div>
-      );
-    else {
-      return (
-        <div className="w-full h-96">
-          <div className="w-full h-96 rounded bg-accent animate-pulse" />
-        </div>
-      );
-    }
-  }
-
   const normalizeData = (
     dataset: ChartDataPoint[],
     usePercentage: boolean,
@@ -110,7 +92,7 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
   };
 
   const indexNormalized = normalizeData(
-    data,
+    data || [],
     showComparison || showETHComparison
   );
   const indexStartDate =
@@ -136,7 +118,7 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
         ...updated[updated.length - 1],
         y:
           showComparison || showETHComparison
-            ? (lastPrice / (data?.[0].price || data?.[0].value) - 1) * 100
+            ? data?.[0]?.price || data?.[0]?.value ? (lastPrice / (data?.[0]?.price || data?.[0]?.value) - 1) * 100 : lastPrice
             : lastPrice,
       };
       setPulsePoint(true); // Trigger animation
@@ -148,6 +130,24 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
     const timeout = setTimeout(() => setPulsePoint(false), 800);
     return () => clearTimeout(timeout);
   }, [indexPrices, ticker, data]);
+
+  if (!data || data.length === 0) {
+    if (!isLoading)
+      return (
+        <div className="flex items-center justify-center h-64 bg-accent rounded-lg">
+          <p className="text-secondary">
+            No historical data available for this index
+          </p>
+        </div>
+      );
+    else {
+      return (
+        <div className="w-full h-96">
+          <div className="w-full h-96 rounded bg-accent animate-pulse" />
+        </div>
+      );
+    }
+  }
 
   const getGradient = (ctx: CanvasRenderingContext2D, chartArea: any) => {
     const gradient = ctx.createLinearGradient(

@@ -118,7 +118,9 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
         ...updated[updated.length - 1],
         y:
           showComparison || showETHComparison
-            ? data?.[0]?.price || data?.[0]?.value ? (lastPrice / (data?.[0]?.price || data?.[0]?.value) - 1) * 100 : lastPrice
+            ? data?.[0]?.price || data?.[0]?.value
+              ? (lastPrice / (data?.[0]?.price || data?.[0]?.value) - 1) * 100
+              : lastPrice
             : lastPrice,
       };
       setPulsePoint(true); // Trigger animation
@@ -180,7 +182,7 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
         pointRadius: (ctx: any) => {
           const index = ctx.dataIndex;
           const lastIndex = patchedData.length - 1;
-          return index === lastIndex ? (pulsePoint ? 6 : 3) : 0;
+          return index === lastIndex ? 0 : 0;
         },
         pointBackgroundColor: (ctx: any) => {
           const index = ctx.dataIndex;
@@ -323,9 +325,59 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
                 if (!showComparison) {
                   const ctx = chart.ctx;
                   const chartArea = chart.chartArea;
+                  if (!chartArea || !ctx) return;
                   const gradient = getGradient(ctx, chartArea);
                   chart.data.datasets[0].backgroundColor = gradient;
                 }
+              },
+            },
+            {
+              id: "lastPriceLine",
+              afterDatasetsDraw(chart) {
+                const dataset = chart.data.datasets?.[0];
+                if (!dataset) return;
+
+                const meta = chart.getDatasetMeta(0);
+                const lastIndex = dataset.data.length - 1;
+                const point = meta?.data?.[lastIndex];
+
+                // Check if point is drawn
+                if (
+                  !point ||
+                  typeof point.x !== "number" ||
+                  typeof point.y !== "number"
+                ) {
+                  console.warn("No last point found to draw a line.");
+                  return;
+                }
+
+                const ctx = chart.ctx;
+                const chartArea = chart.chartArea;
+                if (!chartArea) return;
+
+                const lastPrice = dataset.data[lastIndex] as any;
+
+                ctx.save();
+                ctx.strokeStyle = "#ff3a33"; // Red line
+                ctx.fillStyle = "#ff3a33"; // Same color for label
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]); // Optional dashed line
+
+                // Draw horizontal line
+                ctx.beginPath();
+                ctx.moveTo(chartArea.left, point.y);
+                ctx.lineTo(chartArea.right, point.y);
+                ctx.stroke();
+
+                // Draw label (top-left of line)
+                const labelText = `Price: ${
+                  lastPrice.y !== undefined ? lastPrice.y : lastPrice
+                } USDC`;
+                ctx.font = "12px sans-serif";
+                ctx.textBaseline = "bottom";
+                ctx.fillText(labelText, chartArea.left + 6, point.y - 4); // Offset slightly above the line
+
+                ctx.restore();
               },
             },
           ]}

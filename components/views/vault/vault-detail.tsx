@@ -9,6 +9,7 @@ import {
   Copy,
   Eye,
   EyeOff,
+  FileText,
   HelpCircle,
   Search,
 } from "lucide-react";
@@ -81,6 +82,7 @@ import {
 import { getIndexData } from "@/lib/IndexMockupData";
 import SymmioIndices from "@/components/icons/symmioIndices";
 import { useQuoteContext } from "@/contexts/quote-context";
+import EquityStyleMap from "./fund-style-map";
 interface VaultDetailPageProps {
   index: IndexListEntry | null;
 }
@@ -219,6 +221,9 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
     index &&
       index.ticker &&
       setIndexDescription(getIndexData(index.ticker).description);
+
+    index &&
+      dispatch(addSelectedVault({ name: index.name, ticker: index.ticker }));
   }, [index]);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -413,8 +418,37 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                 </div>
               </div>
               {/* Vault Description */}
-              <div className="bg-foreground rounded-sm p-5  flex items-center w-full">
-                <p className="text-secondary text-[13px] leading-[16px]">
+              <div className="bg-foreground rounded-sm p-5  flex items-center w-full relative">
+                <div className="flex flex-col gap-8 w-full absolute right-3 mt-[-40]">
+                  {/* Top Section with Properties & PDF/SVG Icon */}
+                  <div className="flex justify-between items-start w-full">
+                    {/* Left side (empty or other content) */}
+                    <div></div>
+
+                    {/* Properties Text */}
+                    <div className="flex flex-row items-end gap-4 text-secondary  text-[11px]">
+                      <Link href={"#"}>
+                        <div className="flex flex-col items-center justify-center hover:text-[#2470ff]">
+                          <FileText className="w-4" />
+                          <span>Properties</span>
+                        </div>
+                      </Link>
+                      <Link href={"#"}>
+                        <div className="flex flex-col items-center justify-center text-[11px] hover:text-[#2470ff]">
+                          <FileText className="w-4" />
+                          <span>Reporting method</span>
+                        </div>
+                      </Link>
+                      <Link href={"#"}>
+                        <div className="flex flex-col items-center justify-center text-[11px] hover:text-[#2470ff]">
+                          <FileText className="w-4" />
+                          <span>DK</span>
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-secondary text-[13px] pt-10 leading-[16px]">
                   {indexDescription || ""}
                 </p>
               </div>
@@ -429,7 +463,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                 {/* Index Balance */}
                 <AccordionItem value="Balance">
                   <AccordionTrigger className="text-left lg:text-[20px] text-[16px] text-primary font-custom">
-                    {t("common.AssetsToSupply")}
+                    {t("common.Portfolios")}
                   </AccordionTrigger>
                   <AccordionContent className="pt-4">
                     <IndexBalance
@@ -512,7 +546,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                     >
                       <FundDetail indexId={index.ticker} />
                       <FundOverview indexId={index.ticker} />
-                      <FundRiskReturn indexId={index.ticker} />
+                      <EquityStyleMap indexId={index.ticker} />
                     </div>
                   </AccordionContent>
                 </AccordionItem>
@@ -647,7 +681,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                 {/* Index Balance */}
                 <div className="pt-20">
                   <h2 className="lg:text-[20px] text-[16px] mb-4 text-primary font-custom">
-                    {t("common.AssetsToSupply")}
+                    {t("common.Portfolios")}
                   </h2>
                   <IndexBalance
                     indexBalance={wallet ? "0" : "-"}
@@ -902,7 +936,7 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                     {!isSmallWindow && (
                       <PortfolioManagerInsights indexId={index.ticker} />
                     )}
-                    <FundRiskReturn indexId={index.ticker} />
+                    <EquityStyleMap indexId={index.ticker} />
                     {!isSmallWindow && <Risk indexId={index.ticker} />}
                   </div>
                 </div>

@@ -365,17 +365,28 @@ export const PerformanceChart: React.FC<PerformanceChartProps> = ({
 
                 // Draw horizontal line
                 ctx.beginPath();
-                ctx.moveTo(chartArea.left, point.y);
-                ctx.lineTo(chartArea.right, point.y);
+
+                // Start at 75% of the width (i.e., 1/4 from the right)
+                const startX =
+                  chartArea.left + 0.75 * (chartArea.right - chartArea.left);
+
+                // End at the full width (right edge)
+                const endX = chartArea.right;
+
+                ctx.moveTo(startX, point.y);
+                ctx.lineTo(endX, point.y);
                 ctx.stroke();
 
                 // Draw label (top-left of line)
                 const labelText = `Price: ${
                   lastPrice.y !== undefined ? lastPrice.y : lastPrice
                 } USDC`;
+                
                 ctx.font = "12px sans-serif";
                 ctx.textBaseline = "bottom";
-                ctx.fillText(labelText, chartArea.left + 6, point.y - 4); // Offset slightly above the line
+                
+                // Place label slightly right of line start
+                ctx.fillText(labelText, startX + 6, point.y - 4);
 
                 ctx.restore();
               },

@@ -14,6 +14,7 @@ import {
 import SessionTracker from "../components/posthog/sessionTracker";
 import { WalletProvider } from "@/contexts/wallet-context";
 import { QuoteProvider } from "@/contexts/quote-context";
+import SubscriptionTrigger from "@/components/elements/subscription-trigger";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -63,6 +64,7 @@ export default function RootLayout({
                   <LanguageProvider>
                     {children}
                     <Toaster />
+                    <SubscriptionTrigger />
                   </LanguageProvider>
                 </QuoteProvider>
               </ThemeProvider>

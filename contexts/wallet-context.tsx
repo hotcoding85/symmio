@@ -142,7 +142,7 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     init();
 
     return () => {
-      unsubscribe?.();
+      // unsubscribe?.();
       if (intervalId) clearInterval(intervalId);
     };
   }, []);

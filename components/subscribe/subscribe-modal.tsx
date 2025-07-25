@@ -10,6 +10,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { subscribeEmail } from "@/api/indices";
 import { useDebounce } from "use-debounce";
+import { useMediaQuery } from "react-responsive";
 export function SubscribeModal({
   isOpen,
   onClose,
@@ -20,9 +21,12 @@ export function SubscribeModal({
   IndexName?: string;
 }) {
   const { t } = useLanguage();
+  const isSmallWindow = useMediaQuery({ maxWidth: 1024 });
   const [email, setEmail] = useState("");
   const [debouncedEmail] = useDebounce(email, 300);
   const [privacyChecked, setPrivacyChecked] = useState(false);
+  const [twitterHandle, setTwitterHandle] = useState("");
+
   const handleSubmit = async () => {
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(debouncedEmail);
     if (!isValidEmail) {
@@ -31,7 +35,7 @@ export function SubscribeModal({
     }
 
     try {
-      await subscribeEmail({ email: debouncedEmail });
+      await subscribeEmail({ email: debouncedEmail, twitter: twitterHandle });
       toast.success("Thanks for subscribing!");
       localStorage.setItem("alreadySubscribed", "true");
       onClose();
@@ -39,15 +43,20 @@ export function SubscribeModal({
       toast.error("Subscription failed.");
     }
   };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-[90vw] sm:max-w-[90vw] max-h-[90vh] overflow-y-auto" onInteractOutside={(e) => e.preventDefault()}>
+      <DialogContent
+        className={`  max-h-[90vh] overflow-y-auto ${
+          isSmallWindow ? "!w-[80vw] !max-w-[90vw]" : "!w-[50vw] !max-w-[60vw]"
+        }`}
+        onInteractOutside={(e) => e.preventDefault()}
+      >
         <div className="container mx-auto px-4 py-8">
           {/* Header Section */}
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-4 text-primary">
-              Subscribe to <span className="text-[#FFD700]">IndexMaker</span>{" "}
-              Insights
+              Subscribe to IndexMaker Insights
             </h2>
             <p className="text-lg mb-6 text-secondary text-left">
               {t("subscribe.description") ||
@@ -87,6 +96,23 @@ export function SubscribeModal({
                   className="w-full p-4 border rounded-lg text-[18px] text-primary h-[64px]"
                   placeholder="your@email.com"
                   required
+                />
+              </div>
+              <div className="w-full">
+                <Label
+                  htmlFor="twitter"
+                  className="block mb-2 font-medium text-primary"
+                >
+                  {
+                    "COMPANY TWITTER HANDLE (optional)"}
+                </Label>
+                <Input
+                  id="twitter"
+                  type="text"
+                  value={twitterHandle}
+                  onChange={(e) => setTwitterHandle(e.target.value)}
+                  className="w-full p-4 border rounded-lg text-[18px] text-primary h-[64px]"
+                  placeholder="@yourcompany"
                 />
               </div>
 
@@ -129,7 +155,7 @@ export function SubscribeModal({
             {/* Submit Button */}
             <Button
               onClick={handleSubmit}
-              className="w-full py-6 text-lg font-bold"
+              className="w-full py-6 text-lg font-bold cursor-pointer"
               disabled={!privacyChecked}
             >
               {t("subscribe.submitButton") || "SUBSCRIBE"}

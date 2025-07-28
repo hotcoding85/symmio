@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/tooltip";
 import { VaultSupply } from "@/components/elements/vault-supplyposition";
 import { SupplyPosition } from "@/lib/data";
+import { clearSelectedVault } from "@/redux/vaultSlice";
 
 type ColumnType = {
   id: string;
@@ -127,6 +128,8 @@ export function EarnContent({
     };
 
     !totalManaged && fetchInfo();
+
+    dispatch(clearSelectedVault())
   }, []);
 
   useEffect(() => {

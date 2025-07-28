@@ -218,7 +218,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
               >
                 {t("common.indexmakerDocs")}
               </NavItem>
-              <NavItem
+              {/* <NavItem
                 active={isRouteActive('/contact-us')}
                 href="/contact-us"
                 icon={Feedback}
@@ -228,7 +228,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
                 iconClassName="mr-[2px]"
               >
                 {t("common.support")}
-              </NavItem>
+              </NavItem> */}
               <NavItem
                 href="https://psymm.gitbook.io/indexmaker/index-maker-hld/compliance/terms-of-use"
                 icon={TOS}

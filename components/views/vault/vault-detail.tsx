@@ -436,7 +436,14 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                           <Link href={`#`}>KID</Link>
                         </div>
                       </Link>
-                      <Link target="_blank" href={"#"}>
+                      <Link
+                        target="_blank"
+                        href={`${
+                          process.env.NEXT_PUBLIC_BACKEND_API
+                        }/pdf-generation/pdfview/factsheet/${
+                          index.ticker || "SY100"
+                        }`}
+                      >
                         <div className="flex flex-col items-center justify-center text-[11px] hover:text-[#2470ff]">
                           <FileText className="w-4" />
                           <Link
@@ -451,10 +458,24 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                           </Link>
                         </div>
                       </Link>
-                      <Link href={"#"}>
+                      <Link
+                        href={`${
+                          process.env.NEXT_PUBLIC_BACKEND_API
+                        }/pdf-generation/pdfview/methodology/${
+                          index.ticker || "SY100"
+                        }`}
+                        target="_blank"
+                      >
                         <div className="flex flex-col items-center justify-center text-[11px] hover:text-[#2470ff]">
                           <FileText className="w-4" />
-                          <Link target="_blank" href={`#`}>
+                          <Link
+                            target="_blank"
+                            href={`${
+                              process.env.NEXT_PUBLIC_BACKEND_API
+                            }/pdf-generation/pdfview/methodology/${
+                              index.ticker || "SY100"
+                            }`}
+                          >
                             Methodology
                           </Link>
                         </div>

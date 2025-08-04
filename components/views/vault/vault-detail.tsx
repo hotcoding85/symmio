@@ -376,23 +376,23 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                   isMobile ? "w-full" : "w-[50%]"
                 )}
               >
-                <div
+                {/* <div
                   className={cn(
                     "h-[104px] min-w-[104px] rounded-full overflow-hidden bg-foreground p-[12px] flex items-center justify-center",
                     isMobile ? "" : ""
                   )}
                 >
-                  {/* {vault.icon ? (
+                  {vault.icon ? (
                     <IndexMaker className="w-[80px] h-[80px] text-muted" />
                   ) : (
                     <div className="text-4xl">
                       {vault.token.symbol.charAt(0) || ""}
                     </div>
-                  )} */}
+                  )}
                   <div className="text-4xl text-primary">
-                    {/* {vault.token.symbol.charAt(0) || ""} */}
+                    {vault.token.symbol.charAt(0) || ""}
                   </div>
-                </div>
+                </div> */}
                 <div className="flex gap-6 flex-col">
                   <h1 className="text-[38px] min-w-[50%] h-[44px] text-primary text-center xl:text-left">
                     {index.ticker}
@@ -764,12 +764,12 @@ export function VaultDetailPage({ index }: VaultDetailPageProps) {
                       {/* Curator */}
                       <InfoCard title={t("table.curator")}>
                         <div className="flex items-center gap-2">
-                          <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-transparent flex items-center justify-center">
-                            {/* <IndexMaker className="h-5 w-5 text-muted" /> */}
+                          {/* <div className="relative h-[17px] w-[17px] rounded-full overflow-hidden bg-transparent flex items-center justify-center">
+                            <IndexMaker className="h-5 w-5 text-muted" />
                             <div className="text-4xl text-primary">
-                              {/* {vault.token.symbol.charAt(0) || ""} */}
+                              {vault.token.symbol.charAt(0) || ""}
                             </div>
-                          </div>
+                          </div> */}
                           <span className="text-secondary text-[14px] font-normal">
                             {"SYMMIO"}
                           </span>
